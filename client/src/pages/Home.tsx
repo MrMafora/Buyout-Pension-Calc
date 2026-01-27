@@ -242,6 +242,46 @@ export default function Home() {
           </p>
         </div>
 
+        {/* FAQ Section for SEO */}
+        <div id="faq" className="mt-12 bg-white rounded-2xl border border-slate-200 p-6 md:p-8">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <Info className="w-6 h-6 text-primary" />
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">What is a federal buyout offer?</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                A federal buyout, also known as a Voluntary Separation Incentive Payment (VSIP), is a lump-sum payment offered to federal employees to encourage voluntary separation. Buyouts typically range from $10,000 to $25,000 and are offered during workforce restructuring. Our calculator helps you compare this payment against your future pension benefits.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">How is the FERS pension calculated?</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                FERS (Federal Employees Retirement System) pension is calculated using your High-3 average salary multiplied by years of service and a multiplier. The multiplier is 1.0% for most employees, or 1.1% if you retire at age 62 or older with at least 20 years of service. Special provisions employees (law enforcement, firefighters, air traffic controllers) receive a 1.7% multiplier for their first 20 years.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">What is the early retirement penalty?</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                If you retire before your Minimum Retirement Age (MRA), your pension is reduced by 5% for each year you are under your MRA. For example, if your MRA is 57 and you retire at 55, your pension would be reduced by 10%. This calculator factors in this penalty automatically.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">What is military buyback and how does it work?</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Military buyback allows you to add your active duty military service time to your federal civilian service for retirement purposes. You must deposit 3% of your military base pay to receive credit. This increases your total years of service, resulting in a higher pension benefit.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">What is deferred retirement?</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Deferred retirement applies when you leave federal service with at least 5 years of creditable service but before reaching your MRA. Your pension payments begin at age 62 using the standard 1.0% multiplier. This option is useful for those considering a buyout before retirement eligibility.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Disclaimer Section */}
         <div id="disclaimer" className="mt-8 bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8">
           <div className="flex items-start gap-4">
@@ -254,12 +294,11 @@ export default function Home() {
                 This calculator provides <strong>estimates only</strong> and is <strong>not a substitute</strong> for official OPM guidance or personalized financial advice. The calculations are based on general formulas and may not account for all individual circumstances including:
               </p>
               <ul className="list-disc list-inside text-amber-800 text-sm mt-3 space-y-1">
-                <li>Special retirement provisions (law enforcement, firefighters, air traffic controllers)</li>
-                <li>Military buyback credits</li>
                 <li>Disability retirement considerations</li>
-                <li>Deferred retirement options</li>
                 <li>FEHB health insurance continuation rules</li>
                 <li>TSP (Thrift Savings Plan) implications</li>
+                <li>COLA (Cost of Living Adjustments) projections</li>
+                <li>Social Security offset calculations</li>
               </ul>
               <p className="text-amber-800 text-sm mt-4 font-medium">
                 Always consult with your agency HR office and consider speaking with a qualified financial advisor before making any decisions about your federal career. <strong>This tool is not affiliated with or endorsed by OPM or any government agency.</strong>
