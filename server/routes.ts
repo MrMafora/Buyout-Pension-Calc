@@ -311,6 +311,56 @@ export async function registerRoutes(
     }
   });
 
+  // Save results / Lead capture endpoint
+  app.post("/api/save-results", async (req, res) => {
+    try {
+      const { saveResultsSchema } = await import("@shared/schema");
+      const { db } = await import("./db");
+      const { leads } = await import("@shared/schema");
+      
+      const input = saveResultsSchema.parse(req.body);
+      
+      // Insert lead into database
+      const [lead] = await db.insert(leads).values({
+        name: input.name,
+        email: input.email,
+        phone: input.phone || null,
+        salary: Math.round(input.calculationData.salary),
+        yearsOfService: input.calculationData.yearsOfService,
+        age: input.calculationData.age,
+        retirementSystem: input.calculationData.retirementSystem,
+        monthlyPension: Math.round(input.calculationData.monthlyPension),
+        netBuyout: Math.round(input.calculationData.netBuyout),
+        breakEvenYears: input.calculationData.breakEvenYears.toFixed(1),
+      }).returning();
+      
+      console.log("=== NEW LEAD CAPTURED ===");
+      console.log(`Name: ${input.name}`);
+      console.log(`Email: ${input.email}`);
+      console.log(`Phone: ${input.phone || 'Not provided'}`);
+      console.log(`Monthly Pension: $${input.calculationData.monthlyPension}`);
+      console.log(`Net Buyout: $${input.calculationData.netBuyout}`);
+      console.log("=========================");
+
+      res.json({ 
+        success: true, 
+        message: "Your results have been saved! We'll be in touch soon.",
+        leadId: lead.id
+      });
+
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      } else {
+        console.error(err);
+        res.status(500).json({ message: "Failed to save results. Please try again." });
+      }
+    }
+  });
+
   // Contact form endpoint
   app.post("/api/contact", (req, res) => {
     try {

@@ -111,3 +111,48 @@ export const emailSignupSchema = z.object({
 });
 
 export type EmailSignup = z.infer<typeof emailSignupSchema>;
+
+// Leads table for capturing user info when they want to save results
+export const leads = pgTable("leads", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  // Calculation inputs
+  salary: integer("salary"),
+  yearsOfService: integer("years_of_service"),
+  age: integer("age"),
+  retirementSystem: text("retirement_system"),
+  // Calculation results summary
+  monthlyPension: integer("monthly_pension"),
+  netBuyout: integer("net_buyout"),
+  breakEvenYears: text("break_even_years"),
+  // Metadata
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertLeadSchema = createInsertSchema(leads).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertLead = z.infer<typeof insertLeadSchema>;
+export type Lead = typeof leads.$inferSelect;
+
+// Save results request schema
+export const saveResultsSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  email: z.string().email("Please enter a valid email"),
+  phone: z.string().optional(),
+  calculationData: z.object({
+    salary: z.number(),
+    yearsOfService: z.number(),
+    age: z.number(),
+    retirementSystem: z.string(),
+    monthlyPension: z.number(),
+    netBuyout: z.number(),
+    breakEvenYears: z.number(),
+  }),
+});
+
+export type SaveResultsRequest = z.infer<typeof saveResultsSchema>;

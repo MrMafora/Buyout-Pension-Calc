@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useCalculate, useNewsletterSignup } from "@/hooks/use-calculator";
 import { CalculatorForm } from "@/components/CalculatorForm";
 import { ResultsCard } from "@/components/ResultsCard";
-import type { CalculationResult } from "@shared/schema";
+import type { CalculationResult, CalculateInput } from "@shared/schema";
 import { CALCULATOR_CONFIG } from "@shared/config";
 import { 
   BadgeCheck, 
@@ -24,14 +24,16 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
   const [result, setResult] = useState<CalculationResult | null>(null);
+  const [lastInputData, setLastInputData] = useState<CalculateInput | null>(null);
   const [email, setEmail] = useState("");
   const calculateMutation = useCalculate();
   const newsletterMutation = useNewsletterSignup();
   const { toast } = useToast();
 
-  const handleCalculate = (data: any) => {
+  const handleCalculate = (data: CalculateInput) => {
+    setLastInputData(data);
     calculateMutation.mutate(data, {
-      onSuccess: (data) => setResult(data),
+      onSuccess: (result) => setResult(result),
     });
   };
 
@@ -109,7 +111,8 @@ export default function Home() {
           <div className="lg:col-span-5 relative">
             <ResultsCard 
               result={result} 
-              isLoading={calculateMutation.isPending} 
+              isLoading={calculateMutation.isPending}
+              inputData={lastInputData || undefined}
             />
           </div>
         </div>

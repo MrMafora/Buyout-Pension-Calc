@@ -7,10 +7,14 @@ import {
   Share2,
   Copy,
   Check,
-  Lightbulb
+  Lightbulb,
+  Mail,
+  User,
+  Phone,
+  Send
 } from "lucide-react";
 import { SiX, SiFacebook, SiLinkedin } from "react-icons/si";
-import type { CalculationResult } from "@shared/schema";
+import type { CalculationResult, CalculateInput } from "@shared/schema";
 import { cn } from "@/lib/utils";
 import {
   Accordion,
@@ -19,20 +23,79 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 interface ResultsCardProps {
   result: CalculationResult | null;
   isLoading: boolean;
+  inputData?: CalculateInput;
 }
 
 const formatCurrency = (val: number) => 
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
 
-export function ResultsCard({ result, isLoading }: ResultsCardProps) {
+export function ResultsCard({ result, isLoading, inputData }: ResultsCardProps) {
   const [copied, setCopied] = useState(false);
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [saved, setSaved] = useState(false);
   const { toast } = useToast();
+
+  const saveResultsMutation = useMutation({
+    mutationFn: async (data: { name: string; email: string; phone?: string }) => {
+      if (!result || !inputData) throw new Error("No results to save");
+      const response = await apiRequest("POST", "/api/save-results", {
+        name: data.name,
+        email: data.email,
+        phone: data.phone || undefined,
+        calculationData: {
+          salary: inputData.currentSalary,
+          yearsOfService: inputData.yearsOfService,
+          age: inputData.age,
+          retirementSystem: inputData.retirementSystem,
+          monthlyPension: result.pension.monthly,
+          netBuyout: result.buyout.net,
+          breakEvenYears: result.comparison.breakEvenYears,
+        },
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      setSaved(true);
+      setEmailDialogOpen(false);
+      toast({
+        title: "Results Saved!",
+        description: "Your calculation has been saved. We'll be in touch soon!",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to save results. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSaveResults = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email) return;
+    saveResultsMutation.mutate({ name, email, phone });
+  };
 
   const handleCopyLink = async () => {
     try {
@@ -275,6 +338,106 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        {/* Email My Results Section */}
+        <div className="pt-4 border-t border-slate-100">
+          <Dialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                className="w-full gap-2" 
+                size="lg"
+                disabled={saved}
+                data-testid="button-email-results"
+              >
+                {saved ? (
+                  <>
+                    <Check className="w-5 h-5" />
+                    Results Saved!
+                  </>
+                ) : (
+                  <>
+                    <Mail className="w-5 h-5" />
+                    Email My Results
+                  </>
+                )}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-primary" />
+                  Save Your Results
+                </DialogTitle>
+                <DialogDescription>
+                  Save your calculation so you can review it later with your family or financial advisor.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSaveResults} className="space-y-4 mt-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <User className="w-4 h-4 text-slate-400" />
+                    Your Name
+                  </label>
+                  <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="John Smith"
+                    required
+                    data-testid="input-save-name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-slate-400" />
+                    Email Address
+                  </label>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="john@example.com"
+                    required
+                    data-testid="input-save-email"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-slate-400" />
+                    Phone (optional)
+                  </label>
+                  <Input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="(555) 123-4567"
+                    data-testid="input-save-phone"
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  className="w-full gap-2"
+                  disabled={saveResultsMutation.isPending || !name || !email}
+                  data-testid="button-save-submit"
+                >
+                  {saveResultsMutation.isPending ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Send My Results
+                    </>
+                  )}
+                </Button>
+                <p className="text-xs text-slate-500 text-center">
+                  We respect your privacy and won't spam you.
+                </p>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
 
         {/* Share Section */}
         <div className="pt-4 border-t border-slate-100">
