@@ -13,7 +13,8 @@ import {
   TableHeader, 
   TableRow 
 } from "@/components/ui/table";
-import { Users, Mail, TrendingUp, Lock, LogOut, Calendar } from "lucide-react";
+import { Users, Mail, TrendingUp, Lock, LogOut, Calendar, Send } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 
 interface AdminStats {
@@ -130,8 +131,31 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
 }
 
 function Dashboard({ token, onLogout }: { token: string; onLogout: () => void }) {
+  const { toast } = useToast();
+  const [sendingAnalytics, setSendingAnalytics] = useState(false);
+  
   const authHeaders = {
     Authorization: `Bearer ${token}`,
+  };
+
+  const handleSendAnalytics = async () => {
+    setSendingAnalytics(true);
+    try {
+      const res = await fetch("/api/admin/send-analytics", {
+        method: "POST",
+        headers: authHeaders,
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast({ title: "Analytics email sent!", description: "Check your inbox." });
+      } else {
+        toast({ title: "Failed to send", description: data.message, variant: "destructive" });
+      }
+    } catch {
+      toast({ title: "Error", description: "Failed to send analytics email", variant: "destructive" });
+    } finally {
+      setSendingAnalytics(false);
+    }
   };
 
   const { data: stats, isLoading: statsLoading } = useQuery<AdminStats>({
@@ -193,10 +217,21 @@ function Dashboard({ token, onLogout }: { token: string; onLogout: () => void })
             <span className="text-slate-400">/</span>
             <span className="font-semibold text-slate-700">Admin Dashboard</span>
           </div>
-          <Button variant="outline" onClick={onLogout} data-testid="button-logout">
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleSendAnalytics} 
+              disabled={sendingAnalytics}
+              data-testid="button-send-analytics"
+            >
+              <Send className="w-4 h-4 mr-2" />
+              {sendingAnalytics ? "Sending..." : "Send Analytics"}
+            </Button>
+            <Button variant="outline" onClick={onLogout} data-testid="button-logout">
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 

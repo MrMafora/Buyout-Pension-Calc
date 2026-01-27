@@ -62,11 +62,38 @@ To update for a new year:
 3. Update `lastUpdated` and `dataYear` fields
 4. Restart the application
 
+## Admin Dashboard
+
+The `/admin` page provides a password-protected admin interface for managing subscribers and leads.
+
+**Login Credentials:**
+- Username: `fboadmin`
+- Password: Set via `ADMIN_PASSWORD` environment variable
+
+**Features:**
+- Real-time stats: Total subscribers, total leads, today's activity
+- Subscribers list with email, source, and signup date
+- Leads list with name, contact info, calculation results
+- Manual "Send Analytics" button to trigger daily report
+
+## Email System
+
+The application uses Resend for transactional emails, sending to both `support@fedbuyout.com` and `mmafora@gmail.com`.
+
+**Email Types:**
+1. **Welcome Email**: Sent to new newsletter subscribers
+2. **Contact Form**: Forwards user inquiries to admin accounts
+3. **Lead Notification**: Alerts when someone saves their results
+4. **Daily Analytics**: Scheduled report with subscriber/lead stats
+
+**Daily Analytics Report:**
+- Automatically sent at 6 PM EST every day
+- Includes total counts, today's new signups, and detailed lists
+- Can be manually triggered from the admin dashboard
+
 ## Contact Form
 
-The `/contact` page allows users to submit questions to support@fedbuyout.com. Currently, form submissions are logged to the server console. 
-
-**To enable email sending:** Set up Resend or SendGrid integration to send emails to support@fedbuyout.com. The endpoint `/api/contact` is ready for integration - just add the email sending logic.
+The `/contact` page allows users to submit questions to support@fedbuyout.com. Contact form submissions are sent via Resend to both admin email addresses.
 
 ## External Dependencies
 

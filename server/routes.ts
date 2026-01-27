@@ -6,8 +6,9 @@ import { CALCULATOR_CONFIG } from "@shared/config";
 import { z } from "zod";
 import { db } from "./db";
 import { subscribers, leads } from "@shared/schema";
-import { sendContactFormEmail, sendWelcomeEmail, sendLeadNotificationEmail } from "./email";
+import { sendContactFormEmail, sendWelcomeEmail, sendLeadNotificationEmail, sendDailyAnalyticsEmail } from "./email";
 import { desc } from "drizzle-orm";
+import cron from "node-cron";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 
@@ -535,5 +536,68 @@ export async function registerRoutes(
     }
   });
 
+  // Manual trigger for daily analytics (for testing)
+  app.post("/api/admin/send-analytics", requireAdminAuth, async (req, res) => {
+    try {
+      await sendDailyAnalyticsReport();
+      res.json({ success: true, message: "Analytics email sent" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Failed to send analytics email" });
+    }
+  });
+
+  // Schedule daily analytics email at 6 PM EST (23:00 UTC)
+  // Cron format: minute hour day month dayOfWeek
+  cron.schedule('0 23 * * *', async () => {
+    console.log('Running scheduled daily analytics email...');
+    await sendDailyAnalyticsReport();
+  }, {
+    timezone: "America/New_York"
+  });
+
+  console.log('Daily analytics email scheduled for 6 PM EST');
+
   return httpServer;
+}
+
+// Helper function to gather and send daily analytics
+async function sendDailyAnalyticsReport() {
+  try {
+    const subscribersList = await db.select().from(subscribers);
+    const leadsList = await db.select().from(leads);
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const newSubscribersToday = subscribersList.filter(s => 
+      s.createdAt && new Date(s.createdAt) >= today
+    );
+    
+    const newLeadsToday = leadsList.filter(l => 
+      l.createdAt && new Date(l.createdAt) >= today
+    );
+
+    await sendDailyAnalyticsEmail({
+      totalSubscribers: subscribersList.length,
+      newSubscribersToday: newSubscribersToday.length,
+      totalLeads: leadsList.length,
+      newLeadsToday: newLeadsToday.length,
+      recentSubscribers: newSubscribersToday.map(s => ({
+        email: s.email,
+        source: s.source || 'calculator',
+        createdAt: s.createdAt,
+      })),
+      recentLeads: newLeadsToday.map(l => ({
+        name: l.name,
+        email: l.email,
+        retirementSystem: l.retirementSystem,
+        createdAt: l.createdAt,
+      })),
+    });
+    
+    console.log('Daily analytics email sent successfully');
+  } catch (error) {
+    console.error('Failed to send daily analytics report:', error);
+  }
 }
