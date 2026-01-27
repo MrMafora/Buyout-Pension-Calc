@@ -2,6 +2,7 @@ import type { Express } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
+import { CALCULATOR_CONFIG } from "@shared/config";
 import { z } from "zod";
 
 // In-memory email storage (for demo - in production use a real database)
@@ -33,29 +34,37 @@ export async function registerRoutes(
       // 1. Calculate Pension
       // ========================================
       
+      const { fers, csrs, taxes, earlyRetirement: earlyRetConfig } = CALCULATOR_CONFIG;
       let multiplier: number;
       
       if (retirementSystem === "csrs") {
-        // CSRS: 1.5% for first 5 years, 1.75% for years 5-10, 2% thereafter
-        // Simplified: We'll use weighted average based on years
-        if (yearsOfService <= 5) {
-          multiplier = 0.015;
-        } else if (yearsOfService <= 10) {
-          // Average of 1.5% and 1.75%
-          multiplier = (5 * 0.015 + (yearsOfService - 5) * 0.0175) / yearsOfService;
+        // CSRS: Tiered multipliers from config
+        if (yearsOfService <= csrs.tier1Years) {
+          multiplier = csrs.tier1Multiplier;
+        } else if (yearsOfService <= csrs.tier1Years + csrs.tier2Years) {
+          multiplier = (csrs.tier1Years * csrs.tier1Multiplier + (yearsOfService - csrs.tier1Years) * csrs.tier2Multiplier) / yearsOfService;
         } else {
-          // Full calculation
-          const first5 = 5 * 0.015;
-          const next5 = 5 * 0.0175;
-          const rest = (yearsOfService - 10) * 0.02;
+          const first5 = csrs.tier1Years * csrs.tier1Multiplier;
+          const next5 = csrs.tier2Years * csrs.tier2Multiplier;
+          const rest = (yearsOfService - csrs.tier1Years - csrs.tier2Years) * csrs.tier3Multiplier;
           multiplier = (first5 + next5 + rest) / yearsOfService;
         }
       } else {
-        // FERS: 1.0% normally, 1.1% if age 62+ with 20+ years
-        multiplier = (age >= 62 && yearsOfService >= 20) ? 0.011 : 0.010;
+        // FERS: Multipliers from config
+        multiplier = (age >= fers.bonusAgeRequirement && yearsOfService >= fers.bonusYearsRequirement) 
+          ? fers.bonusMultiplier 
+          : fers.standardMultiplier;
       }
 
       let annualPensionGross = currentSalary * yearsOfService * multiplier;
+      
+      // Apply CSRS max benefit cap
+      if (retirementSystem === "csrs") {
+        const maxPension = currentSalary * csrs.maxBenefitPercent;
+        if (annualPensionGross > maxPension) {
+          annualPensionGross = maxPension;
+        }
+      }
 
       // ========================================
       // 2. Early Retirement Penalty
@@ -65,9 +74,9 @@ export async function registerRoutes(
       let earlyRetirementReduction = 0;
       
       if (isEarlyRetirement && age < minimumRetirementAge) {
-        // 5% reduction for each year under MRA
+        // Reduction per year under MRA from config
         const yearsUnderMRA = minimumRetirementAge - age;
-        earlyRetirementPenalty = yearsUnderMRA * 5; // Percentage
+        earlyRetirementPenalty = yearsUnderMRA * (earlyRetConfig.penaltyPerYear * 100); // Percentage
         earlyRetirementReduction = annualPensionGross * (earlyRetirementPenalty / 100);
         annualPensionGross -= earlyRetirementReduction;
       }
@@ -79,14 +88,13 @@ export async function registerRoutes(
       let survivorBenefitReduction = 0;
       let survivorBenefitAmount = 0;
       
+      const { survivorBenefit: survivorConfig } = CALCULATOR_CONFIG;
       if (survivorBenefit === "full") {
-        // Full survivor benefit: 10% reduction for 50% survivor annuity
-        survivorBenefitReduction = 10;
-        survivorBenefitAmount = annualPensionGross * 0.10;
+        survivorBenefitReduction = survivorConfig.full * 100;
+        survivorBenefitAmount = annualPensionGross * survivorConfig.full;
       } else if (survivorBenefit === "partial") {
-        // Partial survivor benefit: 5% reduction for 25% survivor annuity
-        survivorBenefitReduction = 5;
-        survivorBenefitAmount = annualPensionGross * 0.05;
+        survivorBenefitReduction = survivorConfig.partial * 100;
+        survivorBenefitAmount = annualPensionGross * survivorConfig.partial;
       }
       
       const annualPensionNet = annualPensionGross - survivorBenefitAmount;
@@ -96,35 +104,39 @@ export async function registerRoutes(
       // 4. Calculate Severance Pay (OPM Formula)
       // ========================================
       
-      // Weekly Rate = (Annual / 2087) * 40
-      const weeklyRate = (currentSalary / 2087) * 40;
+      const { severance: sevConfig, buyout: buyoutConfig } = CALCULATOR_CONFIG;
+      
+      // Weekly Rate = (Annual / hoursPerYear) * hoursPerWeek
+      const weeklyRate = (currentSalary / sevConfig.hoursPerYear) * sevConfig.hoursPerWeek;
 
-      // Basic Allowance: 1 week per year (first 10), 2 weeks per year (11+)
+      // Basic Allowance: tier1 weeks per year (first tier1Years), tier2 weeks per year thereafter
       let basicWeeks = 0;
-      if (yearsOfService <= 10) {
-        basicWeeks = yearsOfService * 1;
+      if (yearsOfService <= sevConfig.tier1Years) {
+        basicWeeks = yearsOfService * sevConfig.tier1WeeksPerYear;
       } else {
-        basicWeeks = 10 + (yearsOfService - 10) * 2;
+        basicWeeks = (sevConfig.tier1Years * sevConfig.tier1WeeksPerYear) + 
+                     ((yearsOfService - sevConfig.tier1Years) * sevConfig.tier2WeeksPerYear);
       }
 
       const basicSeverance = basicWeeks * weeklyRate;
 
-      // Age Adjustment: 2.5% for each quarter-year over age 40
+      // Age Adjustment: adjustment per quarter over base age
       let ageAdjustmentFactor = 1.0;
       let ageAdjustmentAmount = 0;
 
-      if (age > 40) {
-        const quartersOver40 = (age - 40) * 4;
-        const increasePercent = quartersOver40 * 0.025;
+      if (age > sevConfig.ageAdjustmentBase) {
+        const quartersOverBase = (age - sevConfig.ageAdjustmentBase) * 4;
+        const increasePercent = quartersOverBase * sevConfig.ageAdjustmentPerQuarter;
         ageAdjustmentFactor = 1 + increasePercent;
       }
 
       let totalSeverance = basicSeverance * ageAdjustmentFactor;
       ageAdjustmentAmount = totalSeverance - basicSeverance;
 
-      // Cap at 1 year salary
-      if (totalSeverance > currentSalary) {
-        totalSeverance = currentSalary;
+      // Cap at maxYearsSalary * annual salary
+      const severanceCap = currentSalary * sevConfig.maxYearsSalary;
+      if (totalSeverance > severanceCap) {
+        totalSeverance = severanceCap;
       }
       
       // ========================================
@@ -137,22 +149,22 @@ export async function registerRoutes(
       } else if (buyoutMode === 'severance') {
         grossBuyout = totalSeverance;
       } else {
-        // 8-Month Buyout
-        grossBuyout = (currentSalary / 12) * 8;
+        // Default buyout (months from config)
+        grossBuyout = (currentSalary / 12) * buyoutConfig.defaultMonths;
       }
 
       // ========================================
       // 6. Calculate Taxes on Buyout
       // ========================================
       
-      // Federal: Flat 22% on supplemental wages
-      const fedTax = grossBuyout * 0.22;
+      // Federal: From config (supplemental wage rate)
+      const fedTax = grossBuyout * taxes.federal.rate;
       
-      // Social Security: 6.2% (up to wage base - simplified)
-      const ssTax = grossBuyout * 0.062;
+      // Social Security: From config (up to wage base - simplified)
+      const ssTax = grossBuyout * taxes.socialSecurity.rate;
 
-      // Medicare: 1.45%
-      const medTax = grossBuyout * 0.0145;
+      // Medicare: From config
+      const medTax = grossBuyout * taxes.medicare.rate;
 
       // State Tax
       const stateTax = grossBuyout * (stateTaxRate / 100);

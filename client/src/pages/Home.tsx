@@ -3,6 +3,7 @@ import { useCalculate, useNewsletterSignup } from "@/hooks/use-calculator";
 import { CalculatorForm } from "@/components/CalculatorForm";
 import { ResultsCard } from "@/components/ResultsCard";
 import type { CalculationResult } from "@shared/schema";
+import { CALCULATOR_CONFIG } from "@shared/config";
 import { 
   BadgeCheck, 
   Info, 
@@ -13,7 +14,9 @@ import {
   Clock,
   Users,
   Mail,
-  ArrowRight
+  ArrowRight,
+  ExternalLink,
+  CalendarCheck
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -203,8 +206,44 @@ export default function Home() {
           </form>
         </div>
 
+        {/* Data Sources Section */}
+        <div className="mt-16 bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-emerald-100 p-2 rounded-lg">
+              <CalendarCheck className="w-5 h-5 text-emerald-600" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-slate-900">Data Current as of {CALCULATOR_CONFIG.lastUpdated}</h3>
+              <p className="text-sm text-slate-500">Using official {CALCULATOR_CONFIG.dataYear} tax rates and OPM pension formulas</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+            {CALCULATOR_CONFIG.sources.map((source) => (
+              <a
+                key={source.name}
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-100 hover:border-primary/30 hover:shadow-sm transition-all group"
+                data-testid={`link-source-${source.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-primary mt-0.5 shrink-0" />
+                <div className="min-w-0">
+                  <div className="font-medium text-slate-800 text-sm group-hover:text-primary truncate">{source.name}</div>
+                  <div className="text-xs text-slate-500 truncate">{source.description}</div>
+                </div>
+              </a>
+            ))}
+          </div>
+          
+          <p className="text-xs text-slate-400 mt-4 text-center">
+            Tax rates, Social Security wage base, and pension formulas are updated annually. Last verified against official sources on {CALCULATOR_CONFIG.lastUpdated}.
+          </p>
+        </div>
+
         {/* Disclaimer Section */}
-        <div id="disclaimer" className="mt-16 bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8">
+        <div id="disclaimer" className="mt-8 bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 md:p-8">
           <div className="flex items-start gap-4">
             <div className="bg-amber-100 p-3 rounded-xl shrink-0">
               <AlertTriangle className="w-6 h-6 text-amber-700" />
@@ -238,7 +277,7 @@ export default function Home() {
           </div>
           <p className="text-sm text-slate-400 flex items-center justify-center gap-2">
             <FileText className="w-4 h-4" />
-            Calculations based on standard OPM formulas and 2025 tax brackets.
+            Calculations based on standard OPM formulas and {CALCULATOR_CONFIG.dataYear} tax brackets.
           </p>
           <p className="text-xs text-slate-300 mt-2">
             FedBuyout.com - For estimation purposes only.
