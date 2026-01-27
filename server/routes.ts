@@ -476,11 +476,11 @@ export async function registerRoutes(
 
   // Admin login verification
   app.post("/api/admin/login", (req, res) => {
-    const { password } = req.body;
-    if (password === ADMIN_PASSWORD) {
+    const { username, password } = req.body;
+    if (username === "fboadmin" && password === ADMIN_PASSWORD) {
       res.json({ success: true, token: ADMIN_PASSWORD });
     } else {
-      res.status(401).json({ success: false, message: "Invalid password" });
+      res.status(401).json({ success: false, message: "Invalid credentials" });
     }
   });
 

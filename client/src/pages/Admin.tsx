@@ -46,6 +46,7 @@ interface Lead {
 }
 
 function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -59,7 +60,7 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
@@ -67,7 +68,7 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
         localStorage.setItem("adminToken", data.token);
         onLogin(data.token);
       } else {
-        setError("Invalid password");
+        setError("Invalid credentials");
       }
     } catch {
       setError("Login failed. Please try again.");
@@ -84,10 +85,21 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
             <Lock className="w-6 h-6 text-primary" />
           </div>
           <CardTitle>Admin Dashboard</CardTitle>
-          <p className="text-muted-foreground text-sm">Enter your password to continue</p>
+          <p className="text-muted-foreground text-sm">Enter your credentials to continue</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter username"
+                data-testid="input-admin-username"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -95,7 +107,7 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
+                placeholder="Enter password"
                 data-testid="input-admin-password"
               />
             </div>
