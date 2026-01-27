@@ -62,6 +62,12 @@ To update for a new year:
 3. Update `lastUpdated` and `dataYear` fields
 4. Restart the application
 
+## Contact Form
+
+The `/contact` page allows users to submit questions to support@fedbuyout.com. Currently, form submissions are logged to the server console. 
+
+**To enable email sending:** Set up Resend or SendGrid integration to send emails to support@fedbuyout.com. The endpoint `/api/contact` is ready for integration - just add the email sending logic.
+
 ## External Dependencies
 
 ### Core Runtime
