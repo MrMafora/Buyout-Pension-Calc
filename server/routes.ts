@@ -293,18 +293,23 @@ export async function registerRoutes(
   });
 
   // Newsletter signup endpoint
-  app.post(api.newsletter.signup.path, (req, res) => {
+  app.post(api.newsletter.signup.path, async (req, res) => {
     try {
       const input = api.newsletter.signup.input.parse(req.body);
       
-      if (emailSubscribers.has(input.email)) {
+      // Try to insert, if already exists it will be ignored
+      const result = await db.insert(subscribers).values({
+        email: input.email,
+        source: "newsletter"
+      }).onConflictDoNothing().returning();
+      
+      if (result.length === 0) {
         return res.json({ 
           success: true, 
           message: "You're already subscribed! We'll keep you updated." 
         });
       }
       
-      emailSubscribers.add(input.email);
       console.log(`New subscriber: ${input.email}`);
       
       res.json({ 

@@ -54,6 +54,8 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
       buyoutMode: "8month",
       stateTaxRate: 5.75,
       customBuyoutAmount: 25000,
+      email: "",
+      subscribeToNewsletter: true,
     },
   });
 
@@ -537,6 +539,57 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
               )}
             />
           )}
+
+          {/* Email Signup Section */}
+          <div className="border-t border-slate-200 pt-6 space-y-4">
+            <div className="flex items-start space-x-3">
+              <FormField
+                control={form.control}
+                name="subscribeToNewsletter"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        data-testid="checkbox-newsletter"
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="cursor-pointer">
+                        Keep me updated on federal buyout news and updates
+                      </FormLabel>
+                      <FormDescription className="text-xs text-slate-500">
+                        Get notified about policy changes, new calculator features, and helpful resources
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            {form.watch("subscribeToNewsletter") && (
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="animate-in fade-in slide-in-from-top-2">
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="email"
+                        placeholder="your.email@example.com"
+                        data-testid="input-email"
+                        {...field}
+                        className="text-lg"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </div>
 
           <Button 
             type="submit" 

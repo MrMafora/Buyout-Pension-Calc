@@ -55,9 +55,26 @@ export const calculateInputSchema = z.object({
   stateTaxRate: z.number().min(0).max(100).default(0),
   
   // Mailing list opt-in
-  email: z.string().email().optional(),
+  email: z.string().optional(),
   subscribeToNewsletter: z.boolean().default(false),
-});
+}).refine(
+  (data) => {
+    // If subscribeToNewsletter is true, email must be a valid email
+    if (data.subscribeToNewsletter) {
+      if (!data.email || data.email.trim() === "") {
+        return false;
+      }
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(data.email);
+    }
+    return true;
+  },
+  {
+    message: "Please enter a valid email address to receive updates",
+    path: ["email"],
+  }
+);
 
 export type CalculateInput = z.infer<typeof calculateInputSchema>;
 
