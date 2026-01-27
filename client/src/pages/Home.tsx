@@ -310,9 +310,9 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-16 pt-8 border-t border-slate-200 text-center">
           <div className="flex justify-center gap-6 text-sm text-slate-500 mb-4">
-            <a href="#" className="hover:text-primary transition-colors">About</a>
-            <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-            <a href="#" className="hover:text-primary transition-colors">Contact</a>
+            <a href="#info" className="hover:text-primary transition-colors">About</a>
+            <a href="#faq" className="hover:text-primary transition-colors">FAQ</a>
+            <a href="/contact" className="hover:text-primary transition-colors" data-testid="link-contact">Contact Us</a>
           </div>
           <p className="text-sm text-slate-400 flex items-center justify-center gap-2">
             <FileText className="w-4 h-4" />

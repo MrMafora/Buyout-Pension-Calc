@@ -311,5 +311,46 @@ export async function registerRoutes(
     }
   });
 
+  // Contact form endpoint
+  app.post("/api/contact", (req, res) => {
+    try {
+      const contactSchema = z.object({
+        name: z.string().min(2),
+        email: z.string().email(),
+        subject: z.string().min(3),
+        message: z.string().min(10),
+      });
+
+      const input = contactSchema.parse(req.body);
+      
+      // Log the contact form submission
+      console.log("=== NEW CONTACT FORM SUBMISSION ===");
+      console.log(`From: ${input.name} <${input.email}>`);
+      console.log(`Subject: ${input.subject}`);
+      console.log(`Message: ${input.message}`);
+      console.log("To: support@fedbuyout.com");
+      console.log("===================================");
+
+      // TODO: Integrate with email service (Resend/SendGrid) to actually send emails
+      // For now, we log the submission and return success
+      
+      res.json({ 
+        success: true, 
+        message: "Your message has been received. We'll respond within 1-2 business days." 
+      });
+
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        res.status(400).json({
+          message: err.errors[0].message,
+          field: err.errors[0].path.join('.'),
+        });
+      } else {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+    }
+  });
+
   return httpServer;
 }
