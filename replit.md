@@ -42,6 +42,24 @@ Preferred communication style: Simple, everyday language.
 
 4. **Component Library**: Using shadcn/ui provides accessible, customizable components without heavy dependencies.
 
+5. **Centralized Configuration**: `shared/config.ts` contains all variable rates (tax rates, pension multipliers, severance parameters) with a last-updated date. This makes annual updates simple - just modify one file when new rates are published each October/November.
+
+### Data Update Process
+
+All variable rates are stored in `shared/config.ts`:
+- **Tax Rates**: Federal (22%), Social Security (6.2%), Medicare (1.45%), SS wage base ($184,500)
+- **Pension Multipliers**: FERS (1.0%/1.1%), CSRS (1.5%/1.75%/2.0%), CSRS max 80%
+- **Early Retirement**: 5% penalty per year under MRA
+- **Survivor Benefits**: Partial (5%), Full (10%) reduction
+- **Severance**: OPM formula parameters
+- **Data Sources**: Links to official OPM, IRS, SSA documentation
+
+To update for a new year:
+1. Check official sources in October/November for new rates
+2. Update values in `shared/config.ts`
+3. Update `lastUpdated` and `dataYear` fields
+4. Restart the application
+
 ## External Dependencies
 
 ### Core Runtime
