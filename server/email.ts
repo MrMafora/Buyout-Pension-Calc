@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY_FED_BUY_OUT);
 
 const FROM_EMAIL = 'FedBuyout <noreply@fedbuyout.com>';
-const SUPPORT_EMAIL = 'support@fedbuyout.com';
+const SUPPORT_EMAILS = ['support@fedbuyout.com', 'mmafora@gmail.com'];
 
 export async function sendContactFormEmail(data: {
   name: string;
@@ -14,7 +14,7 @@ export async function sendContactFormEmail(data: {
   try {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
-      to: SUPPORT_EMAIL,
+      to: SUPPORT_EMAILS,
       replyTo: data.email,
       subject: `[Contact Form] ${data.subject}`,
       html: `
@@ -84,7 +84,7 @@ export async function sendLeadNotificationEmail(data: {
   try {
     const result = await resend.emails.send({
       from: FROM_EMAIL,
-      to: SUPPORT_EMAIL,
+      to: SUPPORT_EMAILS,
       subject: `[New Lead] ${data.name} - ${data.retirementSystem.toUpperCase()}`,
       html: `
         <h2>New Lead Captured</h2>
