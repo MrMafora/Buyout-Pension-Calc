@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateInputSchema, type CalculateInput } from "@shared/schema";
+import { CALCULATOR_CONFIG } from "@shared/config";
 import {
   Form,
   FormControl,
@@ -15,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, ChevronRight, ChevronDown, AlertTriangle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -26,6 +28,15 @@ interface CalculatorFormProps {
 
 export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
   const [earlyRetirementOpen, setEarlyRetirementOpen] = useState(false);
+  const [selectedState, setSelectedState] = useState<string>("VA");
+  
+  const handleStateChange = (stateAbbrev: string) => {
+    setSelectedState(stateAbbrev);
+    const stateData = CALCULATOR_CONFIG.stateTaxRates.find(s => s.abbrev === stateAbbrev);
+    if (stateData) {
+      form.setValue("stateTaxRate", stateData.rate);
+    }
+  };
   
   const form = useForm<CalculateInput>({
     resolver: zodResolver(calculateInputSchema),
@@ -38,7 +49,7 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
       minimumRetirementAge: 57,
       survivorBenefit: "none",
       buyoutMode: "8month",
-      stateTaxRate: 5.0,
+      stateTaxRate: 5.75,
       customBuyoutAmount: 25000,
     },
   });
@@ -119,6 +130,25 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
               )}
             />
 
+            <FormItem>
+              <FormLabel>Your State</FormLabel>
+              <Select value={selectedState} onValueChange={handleStateChange}>
+                <SelectTrigger data-testid="select-state">
+                  <SelectValue placeholder="Select your state" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[300px]">
+                  {CALCULATOR_CONFIG.stateTaxRates.map((state) => (
+                    <SelectItem key={state.abbrev} value={state.abbrev}>
+                      {state.state} ({state.rate === 0 ? "No tax" : `${state.rate}%`})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription className="text-xs">
+                Tax rate auto-fills when you select a state
+              </FormDescription>
+            </FormItem>
+
             <FormField
               control={form.control}
               name="stateTaxRate"
@@ -136,7 +166,7 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="text-xs">
-                    CA: 13.3% | NY: 10.9% | TX/FL: 0%
+                    Adjust if your rate differs from the top bracket
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
