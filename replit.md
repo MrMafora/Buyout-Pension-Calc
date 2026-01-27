@@ -2,7 +2,7 @@
 
 ## Overview
 
-A web application for federal employees to evaluate buyout offers against their pension benefits. Users input their salary, years of service, age, and retirement system (FERS/CSRS) to compare lump-sum buyout payments with projected pension income. The calculator handles early retirement penalties, survivor benefit reductions, and state tax implications.
+A web application for federal employees to evaluate buyout offers against their pension benefits. Users input their salary, years of service, age, and retirement system (FERS/CSRS) to compare lump-sum buyout payments with projected pension income. The calculator handles early retirement penalties, survivor benefit reductions, state tax implications, special provisions for law enforcement/firefighters/air traffic controllers, military buyback credits, and deferred retirement options.
 
 ## User Preferences
 
@@ -49,6 +49,8 @@ Preferred communication style: Simple, everyday language.
 All variable rates are stored in `shared/config.ts`:
 - **Tax Rates**: Federal (22%), Social Security (6.2%), Medicare (1.45%), SS wage base ($184,500)
 - **Pension Multipliers**: FERS (1.0%/1.1%), CSRS (1.5%/1.75%/2.0%), CSRS max 80%
+- **Special Provisions**: LEO/Firefighter/ATC multipliers (1.7% first 20 years, 1.0% thereafter)
+- **Military Buyback**: 3% deposit rate for buying back military service time
 - **Early Retirement**: 5% penalty per year under MRA
 - **Survivor Benefits**: Partial (5%), Full (10%) reduction
 - **Severance**: OPM formula parameters
