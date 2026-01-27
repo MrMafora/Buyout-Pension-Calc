@@ -130,13 +130,17 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
               )}
             />
 
+          </div>
+
+          {/* State Tax Section - Separate to avoid overlay issues */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormItem>
               <FormLabel>Your State</FormLabel>
               <Select value={selectedState} onValueChange={handleStateChange}>
                 <SelectTrigger data-testid="select-state">
                   <SelectValue placeholder="Select your state" />
                 </SelectTrigger>
-                <SelectContent className="max-h-[300px]">
+                <SelectContent className="max-h-[280px]" position="popper" sideOffset={4}>
                   {CALCULATOR_CONFIG.stateTaxRates.map((state) => (
                     <SelectItem key={state.abbrev} value={state.abbrev}>
                       {state.state} ({state.rate === 0 ? "No tax" : `${state.rate}%`})
@@ -166,7 +170,7 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="text-xs">
-                    Adjust if your rate differs from the top bracket
+                    Adjust if needed
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
