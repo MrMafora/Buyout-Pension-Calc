@@ -100,21 +100,23 @@ export default function Home() {
         </div>
 
         {/* Calculator Section */}
-        <div id="calculator" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          <div className="lg:col-span-7">
+        <div id="calculator" className={`grid grid-cols-1 gap-8 lg:gap-12 items-start ${result || calculateMutation.isPending ? 'lg:grid-cols-12' : ''}`}>
+          <div className={result || calculateMutation.isPending ? 'lg:col-span-7' : ''}>
             <CalculatorForm 
               onSubmit={handleCalculate} 
               isLoading={calculateMutation.isPending} 
             />
           </div>
 
-          <div className="lg:col-span-5 relative">
-            <ResultsCard 
-              result={result} 
-              isLoading={calculateMutation.isPending}
-              inputData={lastInputData || undefined}
-            />
-          </div>
+          {(result || calculateMutation.isPending) && (
+            <div className="lg:col-span-5 relative">
+              <ResultsCard 
+                result={result} 
+                isLoading={calculateMutation.isPending}
+                inputData={lastInputData || undefined}
+              />
+            </div>
+          )}
         </div>
 
         {/* Did You Know Section */}

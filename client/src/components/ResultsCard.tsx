@@ -130,17 +130,7 @@ export function ResultsCard({ result, isLoading, inputData }: ResultsCardProps) 
   }
 
   if (!result) {
-    return (
-      <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-8 bg-slate-50 rounded-3xl border border-dashed border-slate-200 text-center">
-        <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-400">
-          <DollarSign className="w-8 h-8" />
-        </div>
-        <h3 className="text-xl font-bold text-slate-700" data-testid="text-ready">Ready to Estimate</h3>
-        <p className="text-slate-500 mt-2 max-w-xs">
-          Enter your service details on the left to see your potential buyout vs. pension comparison.
-        </p>
-      </div>
-    );
+    return null;
   }
 
   // Color code break-even
