@@ -2,11 +2,8 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY_FED_BUY_OUT);
 
-// Use onboarding@resend.dev for testing until domain is fully verified
-const FROM_EMAIL = process.env.NODE_ENV === 'production' 
-  ? 'FedBuyout <noreply@fedbuyout.com>'
-  : 'FedBuyout <onboarding@resend.dev>';
-const SUPPORT_EMAIL = 'mmafora@gmail.com'; // Temporarily send to your email for testing
+const FROM_EMAIL = 'FedBuyout <noreply@fedbuyout.com>';
+const SUPPORT_EMAIL = 'support@fedbuyout.com';
 
 export async function sendContactFormEmail(data: {
   name: string;
