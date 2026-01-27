@@ -26,6 +26,20 @@ export const CALCULATOR_CONFIG = {
     description: "1.0% standard, 1.1% if age 62+ with 20+ years",
   },
   
+  specialProvisions: {
+    first20YearsMultiplier: 0.017,
+    after20YearsMultiplier: 0.01,
+    minRetirementAge: 50,
+    minYearsForEarlyRetirement: 20,
+    categories: ["Law Enforcement", "Firefighter", "Air Traffic Controller"],
+    description: "1.7% for first 20 years, 1.0% thereafter. Can retire at 50 with 20 years or any age with 25 years.",
+  },
+  
+  militaryBuyback: {
+    depositRate: 0.03,
+    description: "3% of military base pay to buy back service time",
+  },
+  
   csrs: {
     tier1Multiplier: 0.015,
     tier1Years: 5,

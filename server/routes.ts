@@ -22,6 +22,9 @@ export async function registerRoutes(
         yearsOfService, 
         age, 
         retirementSystem,
+        isSpecialProvisions,
+        militaryYears,
+        isDeferredRetirement,
         isEarlyRetirement,
         minimumRetirementAge,
         survivorBenefit,
@@ -31,32 +34,53 @@ export async function registerRoutes(
       } = input;
 
       // ========================================
-      // 1. Calculate Pension
+      // 1. Calculate Pension (with military buyback)
       // ========================================
       
-      const { fers, csrs, taxes, earlyRetirement: earlyRetConfig } = CALCULATOR_CONFIG;
+      const { fers, csrs, specialProvisions, taxes, earlyRetirement: earlyRetConfig } = CALCULATOR_CONFIG;
+      
+      // Add military buyback years to total service
+      const totalYearsOfService = yearsOfService + (militaryYears || 0);
+      
       let multiplier: number;
       
-      if (retirementSystem === "csrs") {
+      if (isSpecialProvisions && retirementSystem === "fers") {
+        // Special provisions (LEO, firefighters, ATC): 1.7% for first 20 years, 1.0% thereafter
+        if (totalYearsOfService <= 20) {
+          multiplier = specialProvisions.first20YearsMultiplier;
+        } else {
+          const first20 = 20 * specialProvisions.first20YearsMultiplier;
+          const after20 = (totalYearsOfService - 20) * specialProvisions.after20YearsMultiplier;
+          multiplier = (first20 + after20) / totalYearsOfService;
+        }
+      } else if (retirementSystem === "csrs") {
         // CSRS: Tiered multipliers from config
-        if (yearsOfService <= csrs.tier1Years) {
+        if (totalYearsOfService <= csrs.tier1Years) {
           multiplier = csrs.tier1Multiplier;
-        } else if (yearsOfService <= csrs.tier1Years + csrs.tier2Years) {
-          multiplier = (csrs.tier1Years * csrs.tier1Multiplier + (yearsOfService - csrs.tier1Years) * csrs.tier2Multiplier) / yearsOfService;
+        } else if (totalYearsOfService <= csrs.tier1Years + csrs.tier2Years) {
+          multiplier = (csrs.tier1Years * csrs.tier1Multiplier + (totalYearsOfService - csrs.tier1Years) * csrs.tier2Multiplier) / totalYearsOfService;
         } else {
           const first5 = csrs.tier1Years * csrs.tier1Multiplier;
           const next5 = csrs.tier2Years * csrs.tier2Multiplier;
-          const rest = (yearsOfService - csrs.tier1Years - csrs.tier2Years) * csrs.tier3Multiplier;
-          multiplier = (first5 + next5 + rest) / yearsOfService;
+          const rest = (totalYearsOfService - csrs.tier1Years - csrs.tier2Years) * csrs.tier3Multiplier;
+          multiplier = (first5 + next5 + rest) / totalYearsOfService;
         }
       } else {
         // FERS: Multipliers from config
-        multiplier = (age >= fers.bonusAgeRequirement && yearsOfService >= fers.bonusYearsRequirement) 
+        multiplier = (age >= fers.bonusAgeRequirement && totalYearsOfService >= fers.bonusYearsRequirement) 
           ? fers.bonusMultiplier 
           : fers.standardMultiplier;
       }
 
-      let annualPensionGross = currentSalary * yearsOfService * multiplier;
+      let annualPensionGross = currentSalary * totalYearsOfService * multiplier;
+      
+      // Calculate deferred pension at age 62 (if applicable)
+      let deferredPensionAt62: number | undefined;
+      if (isDeferredRetirement && age < 62) {
+        // Deferred retirement: pension calculated at current service, payable at 62
+        // Uses the 1.0% multiplier (not 1.1% bonus since service ends before 62)
+        deferredPensionAt62 = currentSalary * totalYearsOfService * fers.standardMultiplier;
+      }
       
       // Apply CSRS max benefit cap
       if (retirementSystem === "csrs") {
@@ -202,11 +226,15 @@ export async function registerRoutes(
           monthly: Number(monthlyPension.toFixed(2)),
           multiplier,
           high3: currentSalary,
+          totalYearsOfService,
+          militaryYearsAdded: militaryYears || 0,
+          isSpecialProvisions: isSpecialProvisions || false,
           earlyRetirementPenalty,
           earlyRetirementReduction: Number(earlyRetirementReduction.toFixed(2)),
           survivorBenefitReduction,
           survivorBenefitAmount: Number(survivorBenefitAmount.toFixed(2)),
-          retirementSystem: retirementSystem.toUpperCase(),
+          retirementSystem: isSpecialProvisions ? `${retirementSystem.toUpperCase()} (Special)` : retirementSystem.toUpperCase(),
+          deferredPensionAt62: deferredPensionAt62 ? Number(deferredPensionAt62.toFixed(2)) : undefined,
         },
         severance: {
           weeklyRate: Number(weeklyRate.toFixed(2)),

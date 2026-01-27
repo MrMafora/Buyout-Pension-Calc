@@ -138,8 +138,26 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
           </div>
 
           {/* Pension Adjustments */}
-          {(result.pension.earlyRetirementPenalty > 0 || result.pension.survivorBenefitReduction > 0) && (
+          {(result.pension.militaryYearsAdded > 0 || result.pension.isSpecialProvisions || result.pension.earlyRetirementPenalty > 0 || result.pension.survivorBenefitReduction > 0 || result.pension.deferredPensionAt62) && (
             <div className="space-y-2">
+              {result.pension.isSpecialProvisions && (
+                <div className="flex justify-between text-sm p-2 bg-blue-50 rounded-lg border border-blue-100">
+                  <span className="text-blue-700">Special Provisions (LEO/FF/ATC)</span>
+                  <span className="font-mono text-blue-600">1.7% multiplier</span>
+                </div>
+              )}
+              {result.pension.militaryYearsAdded > 0 && (
+                <div className="flex justify-between text-sm p-2 bg-green-50 rounded-lg border border-green-100">
+                  <span className="text-green-700">Military Buyback Years Added</span>
+                  <span className="font-mono text-green-600">+{result.pension.militaryYearsAdded} years</span>
+                </div>
+              )}
+              {result.pension.deferredPensionAt62 && (
+                <div className="flex justify-between text-sm p-2 bg-indigo-50 rounded-lg border border-indigo-100">
+                  <span className="text-indigo-700">Deferred Pension (at age 62)</span>
+                  <span className="font-mono text-indigo-600">{formatCurrency(result.pension.deferredPensionAt62)}/yr</span>
+                </div>
+              )}
               {result.pension.earlyRetirementPenalty > 0 && (
                 <div className="flex justify-between text-sm p-2 bg-red-50 rounded-lg border border-red-100">
                   <span className="text-red-700">Early Retirement Penalty ({result.pension.earlyRetirementPenalty}%)</span>

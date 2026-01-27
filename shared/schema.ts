@@ -33,6 +33,15 @@ export const calculateInputSchema = z.object({
   age: z.number().min(18, "Age must be 18+"),
   retirementSystem: retirementSystemSchema.default("fers"),
   
+  // Special provisions (LEO, firefighters, ATC)
+  isSpecialProvisions: z.boolean().default(false),
+  
+  // Military buyback
+  militaryYears: z.number().min(0).max(40).default(0),
+  
+  // Deferred retirement
+  isDeferredRetirement: z.boolean().default(false),
+  
   // Early retirement
   isEarlyRetirement: z.boolean().default(false),
   minimumRetirementAge: z.number().min(55).max(57).default(57), // MRA varies by birth year
@@ -63,11 +72,15 @@ export const calculationResultSchema = z.object({
     monthly: z.number(),
     multiplier: z.number(),
     high3: z.number(),
+    totalYearsOfService: z.number(), // Including military buyback
+    militaryYearsAdded: z.number(),
+    isSpecialProvisions: z.boolean(),
     earlyRetirementPenalty: z.number(), // Percentage reduction
     earlyRetirementReduction: z.number(), // Dollar amount
     survivorBenefitReduction: z.number(), // Percentage
     survivorBenefitAmount: z.number(), // Dollar reduction
     retirementSystem: z.string(),
+    deferredPensionAt62: z.number().optional(), // Annual pension if deferred
   }),
   severance: z.object({
     weeklyRate: z.number(),

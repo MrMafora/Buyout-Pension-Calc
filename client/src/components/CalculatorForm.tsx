@@ -45,6 +45,9 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
       yearsOfService: 15,
       age: 50,
       retirementSystem: "fers",
+      isSpecialProvisions: false,
+      militaryYears: 0,
+      isDeferredRetirement: false,
       isEarlyRetirement: false,
       minimumRetirementAge: 57,
       survivorBenefit: "none",
@@ -223,6 +226,95 @@ export function CalculatorForm({ onSubmit, isLoading }: CalculatorFormProps) {
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Special Provisions & Military Buyback */}
+          <div className="pt-4 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Special Provisions Checkbox */}
+              <FormField
+                control={form.control}
+                name="isSpecialProvisions"
+                render={({ field }) => (
+                  <FormItem className={cn(
+                    "flex flex-row items-start space-x-3 space-y-0 rounded-xl border p-4 transition-all",
+                    field.value ? "border-blue-500 bg-blue-50" : "border-slate-200 hover:border-slate-300",
+                    form.watch("retirementSystem") === "csrs" && "opacity-50"
+                  )}>
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        disabled={form.watch("retirementSystem") === "csrs"}
+                        data-testid="checkbox-special-provisions"
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel className="text-sm font-semibold">
+                        Special Provisions
+                      </FormLabel>
+                      <FormDescription className="text-xs">
+                        Law enforcement, firefighters, air traffic controllers (FERS only, 1.7% multiplier for first 20 years)
+                      </FormDescription>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              {/* Military Buyback Years */}
+              <FormField
+                control={form.control}
+                name="militaryYears"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col rounded-xl border border-slate-200 p-4">
+                    <FormLabel className="text-sm font-semibold">Military Buyback Years</FormLabel>
+                    <FormControl>
+                      <Input 
+                        type="number"
+                        min={0}
+                        max={40}
+                        data-testid="input-military-years"
+                        {...field}
+                        onChange={e => field.onChange(Number(e.target.value) || 0)}
+                        className="font-mono"
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      Years of military service to add to your federal time
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Deferred Retirement Checkbox */}
+            <FormField
+              control={form.control}
+              name="isDeferredRetirement"
+              render={({ field }) => (
+                <FormItem className={cn(
+                  "flex flex-row items-start space-x-3 space-y-0 rounded-xl border p-4 transition-all",
+                  field.value ? "border-indigo-500 bg-indigo-50" : "border-slate-200 hover:border-slate-300"
+                )}>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      data-testid="checkbox-deferred-retirement"
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="text-sm font-semibold">
+                      Deferred Retirement
+                    </FormLabel>
+                    <FormDescription className="text-xs">
+                      Leave federal service with 5+ years but before minimum retirement age. Your pension starts at age 62.
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
