@@ -6,6 +6,7 @@ import { CALCULATOR_CONFIG } from "@shared/config";
 import { z } from "zod";
 import { db } from "./db";
 import { subscribers } from "@shared/schema";
+import { sendContactFormEmail, sendWelcomeEmail, sendLeadNotificationEmail } from "./email";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -37,11 +38,18 @@ export async function registerRoutes(
       // Add to mailing list if user opted in
       if (subscribeToNewsletter && email) {
         try {
-          await db.insert(subscribers).values({
+          const result = await db.insert(subscribers).values({
             email,
             source: "calculator"
-          }).onConflictDoNothing();
-          console.log(`New subscriber added: ${email}`);
+          }).onConflictDoNothing().returning();
+          
+          // Only send welcome email if this is a new subscriber
+          if (result.length > 0) {
+            console.log(`New subscriber added: ${email}`);
+            sendWelcomeEmail(email).catch(err => {
+              console.error("Failed to send welcome email:", err);
+            });
+          }
         } catch (subErr) {
           console.error("Error adding subscriber:", subErr);
         }
@@ -312,6 +320,11 @@ export async function registerRoutes(
       
       console.log(`New subscriber: ${input.email}`);
       
+      // Send welcome email (don't block response on this)
+      sendWelcomeEmail(input.email).catch(err => {
+        console.error("Failed to send welcome email:", err);
+      });
+      
       res.json({ 
         success: true, 
         message: "Thanks for subscribing! You'll receive updates on federal buyout news." 
@@ -361,6 +374,22 @@ export async function registerRoutes(
       console.log(`Net Buyout: $${input.calculationData.netBuyout}`);
       console.log("=========================");
 
+      // Send lead notification email (don't block response on this)
+      sendLeadNotificationEmail({
+        name: input.name,
+        email: input.email,
+        phone: input.phone,
+        salary: input.calculationData.salary,
+        yearsOfService: input.calculationData.yearsOfService,
+        age: input.calculationData.age,
+        retirementSystem: input.calculationData.retirementSystem,
+        monthlyPension: input.calculationData.monthlyPension,
+        netBuyout: input.calculationData.netBuyout,
+        breakEvenYears: input.calculationData.breakEvenYears,
+      }).catch(err => {
+        console.error("Failed to send lead notification email:", err);
+      });
+
       res.json({ 
         success: true, 
         message: "Your results have been saved! We'll be in touch soon.",
@@ -381,7 +410,7 @@ export async function registerRoutes(
   });
 
   // Contact form endpoint
-  app.post("/api/contact", (req, res) => {
+  app.post("/api/contact", async (req, res) => {
     try {
       const contactSchema = z.object({
         name: z.string().min(2),
@@ -400,8 +429,12 @@ export async function registerRoutes(
       console.log("To: support@fedbuyout.com");
       console.log("===================================");
 
-      // TODO: Integrate with email service (Resend/SendGrid) to actually send emails
-      // For now, we log the submission and return success
+      // Send email via Resend
+      const emailResult = await sendContactFormEmail(input);
+      
+      if (!emailResult.success) {
+        console.error("Email sending failed, but contact was logged");
+      }
       
       res.json({ 
         success: true, 
