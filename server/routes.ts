@@ -5,8 +5,24 @@ import { api } from "@shared/routes";
 import { CALCULATOR_CONFIG } from "@shared/config";
 import { z } from "zod";
 import { db } from "./db";
-import { subscribers } from "@shared/schema";
+import { subscribers, leads } from "@shared/schema";
 import { sendContactFormEmail, sendWelcomeEmail, sendLeadNotificationEmail } from "./email";
+import { desc } from "drizzle-orm";
+
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+
+// Simple admin auth middleware
+function requireAdminAuth(req: any, res: any, next: any) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const token = authHeader.split(" ")[1];
+  if (token !== ADMIN_PASSWORD) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+  next();
+}
 
 export async function registerRoutes(
   httpServer: Server,
@@ -451,6 +467,71 @@ export async function registerRoutes(
         console.error(err);
         res.status(500).json({ message: "Internal Server Error" });
       }
+    }
+  });
+
+  // ========================================
+  // Admin API Routes
+  // ========================================
+
+  // Admin login verification
+  app.post("/api/admin/login", (req, res) => {
+    const { password } = req.body;
+    if (password === ADMIN_PASSWORD) {
+      res.json({ success: true, token: ADMIN_PASSWORD });
+    } else {
+      res.status(401).json({ success: false, message: "Invalid password" });
+    }
+  });
+
+  // Get dashboard stats
+  app.get("/api/admin/stats", requireAdminAuth, async (req, res) => {
+    try {
+      const subscribersList = await db.select().from(subscribers);
+      const leadsList = await db.select().from(leads);
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const subscribersToday = subscribersList.filter(s => 
+        s.createdAt && new Date(s.createdAt) >= today
+      ).length;
+      
+      const leadsToday = leadsList.filter(l => 
+        l.createdAt && new Date(l.createdAt) >= today
+      ).length;
+
+      res.json({
+        totalSubscribers: subscribersList.length,
+        subscribersToday,
+        totalLeads: leadsList.length,
+        leadsToday,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Failed to fetch stats" });
+    }
+  });
+
+  // Get all subscribers
+  app.get("/api/admin/subscribers", requireAdminAuth, async (req, res) => {
+    try {
+      const subscribersList = await db.select().from(subscribers).orderBy(desc(subscribers.createdAt));
+      res.json(subscribersList);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Failed to fetch subscribers" });
+    }
+  });
+
+  // Get all leads
+  app.get("/api/admin/leads", requireAdminAuth, async (req, res) => {
+    try {
+      const leadsList = await db.select().from(leads).orderBy(desc(leads.createdAt));
+      res.json(leadsList);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Failed to fetch leads" });
     }
   });
 
