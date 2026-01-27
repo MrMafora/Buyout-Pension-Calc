@@ -53,6 +53,10 @@ export const calculateInputSchema = z.object({
   buyoutMode: z.enum(["custom", "8month", "severance"]).default("8month"),
   customBuyoutAmount: z.number().optional(),
   stateTaxRate: z.number().min(0).max(100).default(0),
+  
+  // Mailing list opt-in
+  email: z.string().email().optional(),
+  subscribeToNewsletter: z.boolean().default(false),
 });
 
 export type CalculateInput = z.infer<typeof calculateInputSchema>;
@@ -111,6 +115,22 @@ export const emailSignupSchema = z.object({
 });
 
 export type EmailSignup = z.infer<typeof emailSignupSchema>;
+
+// Subscribers/Mailing list table
+export const subscribers = pgTable("subscribers", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  source: text("source").default("calculator"), // where they signed up from
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertSubscriberSchema = createInsertSchema(subscribers).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertSubscriber = z.infer<typeof insertSubscriberSchema>;
+export type Subscriber = typeof subscribers.$inferSelect;
 
 // Leads table for capturing user info when they want to save results
 export const leads = pgTable("leads", {

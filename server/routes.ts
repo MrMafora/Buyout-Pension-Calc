@@ -4,16 +4,15 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { CALCULATOR_CONFIG } from "@shared/config";
 import { z } from "zod";
-
-// In-memory email storage (for demo - in production use a real database)
-const emailSubscribers: Set<string> = new Set();
+import { db } from "./db";
+import { subscribers } from "@shared/schema";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
 
-  app.post(api.calculator.calculate.path, (req, res) => {
+  app.post(api.calculator.calculate.path, async (req, res) => {
     try {
       const input = api.calculator.calculate.input.parse(req.body);
       
@@ -30,8 +29,23 @@ export async function registerRoutes(
         survivorBenefit,
         buyoutMode, 
         customBuyoutAmount, 
-        stateTaxRate 
+        stateTaxRate,
+        email,
+        subscribeToNewsletter
       } = input;
+
+      // Add to mailing list if user opted in
+      if (subscribeToNewsletter && email) {
+        try {
+          await db.insert(subscribers).values({
+            email,
+            source: "calculator"
+          }).onConflictDoNothing();
+          console.log(`New subscriber added: ${email}`);
+        } catch (subErr) {
+          console.error("Error adding subscriber:", subErr);
+        }
+      }
 
       // ========================================
       // 1. Calculate Pension (with military buyback)
