@@ -2,11 +2,14 @@ import { motion } from "framer-motion";
 import { 
   DollarSign, 
   TrendingUp, 
-  Briefcase, 
   AlertCircle,
   PiggyBank,
-  ArrowRight
+  Share2,
+  Copy,
+  Check,
+  Lightbulb
 } from "lucide-react";
+import { SiX, SiFacebook, SiLinkedin } from "react-icons/si";
 import type { CalculationResult } from "@shared/schema";
 import { cn } from "@/lib/utils";
 import {
@@ -15,6 +18,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResultsCardProps {
   result: CalculationResult | null;
@@ -25,6 +31,32 @@ const formatCurrency = (val: number) =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
 
 export function ResultsCard({ result, isLoading }: ResultsCardProps) {
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      toast({ title: "Link copied!", description: "Share it with fellow feds." });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: "Failed to copy", variant: "destructive" });
+    }
+  };
+
+  const shareText = "Considering a federal buyout? Use this calculator to compare your options:";
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
+  const handleShare = (platform: string) => {
+    const urls: Record<string, string> = {
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+    };
+    window.open(urls[platform], "_blank", "width=600,height=400");
+  };
+
   if (isLoading) {
     return (
       <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-8 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50">
@@ -40,13 +72,20 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
         <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-400">
           <DollarSign className="w-8 h-8" />
         </div>
-        <h3 className="text-xl font-bold text-slate-700">Ready to Estimate</h3>
+        <h3 className="text-xl font-bold text-slate-700" data-testid="text-ready">Ready to Estimate</h3>
         <p className="text-slate-500 mt-2 max-w-xs">
           Enter your service details on the left to see your potential buyout vs. pension comparison.
         </p>
       </div>
     );
   }
+
+  // Color code break-even
+  const breakEvenColor = result.comparison.breakEvenYears > 5 
+    ? "text-emerald-600 bg-emerald-50 border-emerald-200" 
+    : result.comparison.breakEvenYears > 3 
+    ? "text-amber-600 bg-amber-50 border-amber-200" 
+    : "text-red-600 bg-red-50 border-red-200";
 
   return (
     <motion.div 
@@ -60,12 +99,12 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
         
         <div className="relative z-10">
           <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-medium text-white/80 border border-white/10 mb-4">
-            <TrendingUp className="w-3 h-3" /> Estimate
+            <TrendingUp className="w-3 h-3" /> {result.pension.retirementSystem} Estimate
           </span>
           
           <div className="space-y-1">
             <p className="text-slate-400 text-sm font-medium uppercase tracking-wider">Estimated Net Buyout</p>
-            <h2 className="text-5xl font-bold tracking-tight text-white">
+            <h2 className="text-5xl font-bold tracking-tight text-white" data-testid="text-net-buyout">
               {formatCurrency(result.buyout.net)}
             </h2>
             <p className="text-slate-400 text-sm mt-2 flex items-center gap-2">
@@ -76,7 +115,7 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
         </div>
       </div>
 
-      <div className="p-8 space-y-8">
+      <div className="p-8 space-y-6">
         {/* Pension Comparison */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -84,26 +123,51 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
               <PiggyBank className="w-5 h-5 text-primary" />
               Vs. Pension Income
             </h3>
-            <span className="text-sm text-muted-foreground">FERS Annuity</span>
+            <span className="text-sm text-muted-foreground">{result.pension.retirementSystem} Annuity</span>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
               <p className="text-xs font-medium text-muted-foreground uppercase mb-1">Monthly</p>
-              <p className="text-2xl font-bold text-slate-900">{formatCurrency(result.pension.monthly)}</p>
+              <p className="text-2xl font-bold text-slate-900" data-testid="text-monthly-pension">{formatCurrency(result.pension.monthly)}</p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-              <p className="text-xs font-medium text-muted-foreground uppercase mb-1">Annual</p>
-              <p className="text-2xl font-bold text-slate-900">{formatCurrency(result.pension.annual)}</p>
+              <p className="text-xs font-medium text-muted-foreground uppercase mb-1">Annual (Net)</p>
+              <p className="text-2xl font-bold text-slate-900" data-testid="text-annual-pension">{formatCurrency(result.pension.annualNet)}</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-100 text-amber-900 text-sm flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          {/* Pension Adjustments */}
+          {(result.pension.earlyRetirementPenalty > 0 || result.pension.survivorBenefitReduction > 0) && (
+            <div className="space-y-2">
+              {result.pension.earlyRetirementPenalty > 0 && (
+                <div className="flex justify-between text-sm p-2 bg-red-50 rounded-lg border border-red-100">
+                  <span className="text-red-700">Early Retirement Penalty ({result.pension.earlyRetirementPenalty}%)</span>
+                  <span className="font-mono text-red-600">-{formatCurrency(result.pension.earlyRetirementReduction)}/yr</span>
+                </div>
+              )}
+              {result.pension.survivorBenefitReduction > 0 && (
+                <div className="flex justify-between text-sm p-2 bg-amber-50 rounded-lg border border-amber-100">
+                  <span className="text-amber-700">Survivor Benefit ({result.pension.survivorBenefitReduction}%)</span>
+                  <span className="font-mono text-amber-600">-{formatCurrency(result.pension.survivorBenefitAmount)}/yr</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Break Even */}
+          <div className={cn("p-4 rounded-xl border text-sm flex items-start gap-3", breakEvenColor)}>
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
             <p>
-              <span className="font-bold block text-amber-800 mb-1">Break-Even Analysis</span>
-              It would take about <strong className="text-amber-700">{result.comparison.breakEvenYears.toFixed(1)} years</strong> of pension payments to equal this net buyout amount.
+              <span className="font-bold block mb-1">Break-Even Analysis</span>
+              It would take about <strong>{result.comparison.breakEvenYears.toFixed(1)} years</strong> of pension payments to equal this net buyout amount.
             </p>
+          </div>
+
+          {/* Recommendation */}
+          <div className="p-4 rounded-xl bg-blue-50 border border-blue-100 text-blue-900 text-sm flex items-start gap-3">
+            <Lightbulb className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+            <p>{result.comparison.recommendation}</p>
           </div>
         </div>
 
@@ -140,9 +204,31 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
             </AccordionContent>
           </AccordionItem>
 
+          <AccordionItem value="pension" className="border-b-0 mb-2">
+            <AccordionTrigger className="hover:no-underline py-3 px-4 bg-slate-50 rounded-xl data-[state=open]:rounded-b-none data-[state=open]:bg-slate-100 transition-colors">
+              <span className="font-semibold text-slate-700">Pension Calculation</span>
+            </AccordionTrigger>
+            <AccordionContent className="px-4 py-4 bg-slate-50 rounded-b-xl border-t border-slate-200/50">
+              <div className="space-y-3 text-sm text-slate-600">
+                <div className="flex justify-between">
+                  <span>High-3 Salary</span>
+                  <span className="font-mono">{formatCurrency(result.pension.high3)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Multiplier ({result.pension.retirementSystem})</span>
+                  <span className="font-mono">{(result.pension.multiplier * 100).toFixed(2)}%</span>
+                </div>
+                <div className="flex justify-between font-medium">
+                  <span>Gross Annual</span>
+                  <span className="font-mono">{formatCurrency(result.pension.annualGross)}</span>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem value="formula" className="border-b-0">
             <AccordionTrigger className="hover:no-underline py-3 px-4 bg-slate-50 rounded-xl data-[state=open]:rounded-b-none data-[state=open]:bg-slate-100 transition-colors">
-              <span className="font-semibold text-slate-700">Formula Details</span>
+              <span className="font-semibold text-slate-700">Severance Formula</span>
             </AccordionTrigger>
             <AccordionContent className="px-4 py-4 bg-slate-50 rounded-b-xl border-t border-slate-200/50">
               <div className="space-y-3 text-sm text-slate-600">
@@ -152,17 +238,71 @@ export function ResultsCard({ result, isLoading }: ResultsCardProps) {
                 </div>
                 <div className="flex justify-between">
                   <span>Credited Weeks</span>
-                  <span className="font-mono">{result.severance.basicWeeks.toFixed(1)} weeks</span>
+                  <span className="font-mono">{result.severance.basicWeeks.toFixed(0)} weeks</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Basic Severance</span>
+                  <span className="font-mono">{formatCurrency(result.severance.basicAmount)}</span>
                 </div>
                 {result.severance.ageAdjustmentFactor > 1 && (
                   <div className="p-2 bg-blue-50 text-blue-800 rounded text-xs mt-2">
-                    <strong>Age Bonus Active:</strong> Your severance was multiplied by {result.severance.ageAdjustmentFactor.toFixed(2)}x because you are over 40.
+                    <strong>Age Bonus Active:</strong> Your severance was multiplied by {result.severance.ageAdjustmentFactor.toFixed(2)}x (+{formatCurrency(result.severance.ageAdjustmentAmount)}) because you are over 40.
                   </div>
                 )}
+                <div className="flex justify-between font-medium pt-2 border-t border-slate-200">
+                  <span>Total Severance (if applicable)</span>
+                  <span className="font-mono">{formatCurrency(result.severance.totalGross)}</span>
+                </div>
               </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        {/* Share Section */}
+        <div className="pt-4 border-t border-slate-100">
+          <p className="text-sm font-medium text-slate-700 mb-3 flex items-center gap-2">
+            <Share2 className="w-4 h-4" /> Share with fellow feds
+          </p>
+          <div className="flex gap-2 flex-wrap">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleShare("twitter")}
+              data-testid="button-share-twitter"
+              className="gap-2"
+            >
+              <SiX className="w-4 h-4" /> X
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleShare("facebook")}
+              data-testid="button-share-facebook"
+              className="gap-2"
+            >
+              <SiFacebook className="w-4 h-4" /> Facebook
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleShare("linkedin")}
+              data-testid="button-share-linkedin"
+              className="gap-2"
+            >
+              <SiLinkedin className="w-4 h-4" /> LinkedIn
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleCopyLink}
+              data-testid="button-copy-link"
+              className="gap-2"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "Copied!" : "Copy Link"}
+            </Button>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

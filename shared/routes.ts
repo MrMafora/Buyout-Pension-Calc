@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { calculateInputSchema, calculationResultSchema } from './schema';
+import { calculateInputSchema, calculationResultSchema, emailSignupSchema } from './schema';
 
 export const errorSchemas = {
   validation: z.object({
@@ -23,6 +23,17 @@ export const api = {
       },
     },
   },
+  newsletter: {
+    signup: {
+      method: 'POST' as const,
+      path: '/api/newsletter/signup',
+      input: emailSignupSchema,
+      responses: {
+        200: z.object({ success: z.boolean(), message: z.string() }),
+        400: errorSchemas.validation,
+      },
+    },
+  },
 };
 
 export function buildUrl(path: string, params?: Record<string, string | number>): string {
@@ -36,3 +47,8 @@ export function buildUrl(path: string, params?: Record<string, string | number>)
   }
   return url;
 }
+
+// Type exports
+export type CalculateInput = z.infer<typeof api.calculator.calculate.input>;
+export type CalculationResponse = z.infer<typeof api.calculator.calculate.responses[200]>;
+export type EmailSignupInput = z.infer<typeof api.newsletter.signup.input>;

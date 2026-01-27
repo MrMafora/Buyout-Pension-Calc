@@ -1,15 +1,14 @@
-import { pgTable, text, serial, integer, boolean, timestamp, numeric } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // We don't need a database for this logic-only app, but we'll keep the structure
-// in case we want to save calculations later.
 export const calculations = pgTable("calculations", {
   id: serial("id").primaryKey(),
   salary: integer("salary").notNull(),
   yearsOfService: integer("years_of_service").notNull(),
   age: integer("age").notNull(),
-  buyoutOffer: integer("buyout_offer"), // User provided fixed amount
+  buyoutOffer: integer("buyout_offer"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -22,10 +21,26 @@ export const insertCalculationSchema = createInsertSchema(calculations).pick({
 
 // === API CONTRACT TYPES ===
 
+export const retirementSystemSchema = z.enum(["fers", "csrs"]);
+export type RetirementSystem = z.infer<typeof retirementSystemSchema>;
+
+export const survivorBenefitSchema = z.enum(["none", "partial", "full"]);
+export type SurvivorBenefit = z.infer<typeof survivorBenefitSchema>;
+
 export const calculateInputSchema = z.object({
   currentSalary: z.number().min(1, "Salary is required"),
   yearsOfService: z.number().min(0, "Years of service is required"),
   age: z.number().min(18, "Age must be 18+"),
+  retirementSystem: retirementSystemSchema.default("fers"),
+  
+  // Early retirement
+  isEarlyRetirement: z.boolean().default(false),
+  minimumRetirementAge: z.number().min(55).max(57).default(57), // MRA varies by birth year
+  
+  // Survivor benefits
+  survivorBenefit: survivorBenefitSchema.default("none"),
+  
+  // Buyout options
   buyoutMode: z.enum(["custom", "8month", "severance"]).default("8month"),
   customBuyoutAmount: z.number().optional(),
   stateTaxRate: z.number().min(0).max(100).default(0),
@@ -43,10 +58,16 @@ export const taxBreakdownSchema = z.object({
 
 export const calculationResultSchema = z.object({
   pension: z.object({
-    annual: z.number(),
+    annualGross: z.number(),
+    annualNet: z.number(), // After survivor benefit reduction
     monthly: z.number(),
-    multiplier: z.number(), // 1.0 or 1.1
-    high3: z.number(), // Assumed same as current for simplicity, or we could ask
+    multiplier: z.number(),
+    high3: z.number(),
+    earlyRetirementPenalty: z.number(), // Percentage reduction
+    earlyRetirementReduction: z.number(), // Dollar amount
+    survivorBenefitReduction: z.number(), // Percentage
+    survivorBenefitAmount: z.number(), // Dollar reduction
+    retirementSystem: z.string(),
   }),
   severance: z.object({
     weeklyRate: z.number(),
@@ -62,9 +83,18 @@ export const calculationResultSchema = z.object({
     taxes: taxBreakdownSchema,
   }),
   comparison: z.object({
-    breakEvenYears: z.number(), // Buyout Net / Pension Annual
-    difference5Year: z.number(), // (Pension * 5) - Buyout Net
+    breakEvenYears: z.number(),
+    difference5Year: z.number(),
+    difference10Year: z.number(),
+    recommendation: z.string(),
   })
 });
 
 export type CalculationResult = z.infer<typeof calculationResultSchema>;
+
+// Email signup schema
+export const emailSignupSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+export type EmailSignup = z.infer<typeof emailSignupSchema>;
