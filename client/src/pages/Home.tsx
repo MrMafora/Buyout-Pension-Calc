@@ -7,7 +7,6 @@ import { CALCULATOR_CONFIG } from "@shared/config";
 import { 
   BadgeCheck, 
   Info, 
-  ShieldCheck, 
   Scale, 
   FileText, 
   AlertTriangle,
@@ -76,9 +75,6 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium mb-6 border border-blue-100">
-            <ShieldCheck className="w-4 h-4" /> Unofficial Estimation Tool
-          </span>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 tracking-tight leading-tight">
             Should you take the <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">Buyout or Stay?</span>
