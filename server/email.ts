@@ -1,9 +1,27 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY_FED_BUY_OUT);
-
-const FROM_EMAIL = 'FedBuyout <noreply@fedbuyout.com>';
+const FROM_EMAIL = 'FedBuyOut <support@fedbuyout.com>';
 const SUPPORT_EMAILS = ['support@fedbuyout.com', 'mmafora@gmail.com'];
+
+// Initialize Resend only if API key is valid
+const apiKey = process.env.RESEND_API_KEY_FED_BUY_OUT;
+let resend: Resend | null = null;
+
+try {
+  if (apiKey && apiKey.startsWith('re_')) {
+    resend = new Resend(apiKey);
+    console.log('Resend email client initialized successfully');
+  } else {
+    console.warn('Resend API key not configured or invalid. Email features will be disabled.');
+  }
+} catch (error) {
+  console.error('Failed to initialize Resend client:', error);
+}
+
+// Helper to check if email is available
+function isEmailAvailable(): boolean {
+  return resend !== null;
+}
 
 export async function sendContactFormEmail(data: {
   name: string;
@@ -11,8 +29,13 @@ export async function sendContactFormEmail(data: {
   subject: string;
   message: string;
 }) {
+  if (!isEmailAvailable()) {
+    console.log('[EMAIL DISABLED] Contact form submission logged:', data);
+    return { success: false, error: 'Email service not configured' };
+  }
+
   try {
-    const result = await resend.emails.send({
+    const result = await resend!.emails.send({
       from: FROM_EMAIL,
       to: SUPPORT_EMAILS,
       replyTo: data.email,
@@ -36,8 +59,13 @@ export async function sendContactFormEmail(data: {
 }
 
 export async function sendWelcomeEmail(email: string) {
+  if (!isEmailAvailable()) {
+    console.log('[EMAIL DISABLED] Welcome email would be sent to:', email);
+    return { success: false, error: 'Email service not configured' };
+  }
+
   try {
-    const result = await resend.emails.send({
+    const result = await resend!.emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: 'Welcome to FedBuyout Updates!',
@@ -77,6 +105,11 @@ export async function sendDailyAnalyticsEmail(data: {
   recentSubscribers: Array<{ email: string; source: string; createdAt: Date | null }>;
   recentLeads: Array<{ name: string; email: string; retirementSystem: string | null; createdAt: Date | null }>;
 }) {
+  if (!isEmailAvailable()) {
+    console.log('[EMAIL DISABLED] Daily analytics would be sent:', data);
+    return { success: false, error: 'Email service not configured' };
+  }
+
   const today = new Date().toLocaleDateString('en-US', { 
     weekday: 'long', 
     year: 'numeric', 
@@ -85,7 +118,7 @@ export async function sendDailyAnalyticsEmail(data: {
   });
 
   try {
-    const result = await resend.emails.send({
+    const result = await resend!.emails.send({
       from: FROM_EMAIL,
       to: SUPPORT_EMAILS,
       subject: `[Daily Report] FedBuyout Analytics - ${today}`,
@@ -179,8 +212,13 @@ export async function sendLeadNotificationEmail(data: {
   netBuyout: number;
   breakEvenYears: number;
 }) {
+  if (!isEmailAvailable()) {
+    console.log('[EMAIL DISABLED] Lead notification would be sent:', data);
+    return { success: false, error: 'Email service not configured' };
+  }
+
   try {
-    const result = await resend.emails.send({
+    const result = await resend!.emails.send({
       from: FROM_EMAIL,
       to: SUPPORT_EMAILS,
       subject: `[New Lead] ${data.name} - ${data.retirementSystem.toUpperCase()}`,

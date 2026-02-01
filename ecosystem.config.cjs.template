@@ -1,0 +1,26 @@
+module.exports = {
+  apps: [{
+    name: 'fedbuyout',
+    script: './dist/index.cjs',
+    cwd: '/root/.openclaw/workspace/fedbuyout',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 5000,
+      DATABASE_URL: 'postgresql://USER:PASSWORD@localhost:5432/fedbuyout',
+      RESEND_API_KEY_FED_BUY_OUT: 're_YOUR_API_KEY_HERE',
+      ADMIN_PASSWORD: 'YOUR_ADMIN_PASSWORD_HERE',
+      SUPPORT_EMAIL: 'support@fedbuyout.com',
+      BUSINESS_EMAIL: 'clark@fedbuyout.com',
+      GMAIL_ACCOUNT: 'fedbuyout@gmail.com',
+      GMAIL_PASSWORD: 'YOUR_GMAIL_PASSWORD_HERE'
+    },
+    instances: 1,
+    autorestart: true,
+    watch: false,
+    max_memory_restart: '500M',
+    log_file: '/root/.openclaw/workspace/fedbuyout/logs/combined.log',
+    out_file: '/root/.openclaw/workspace/fedbuyout/logs/out.log',
+    error_file: '/root/.openclaw/workspace/fedbuyout/logs/error.log',
+    log_date_format: 'YYYY-MM-DD HH:mm:ss Z'
+  }]
+};

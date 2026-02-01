@@ -4,3 +4,8 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+.env.production
+ecosystem.config.cjs
+logs/
+ga_error.png
+test_email.js
