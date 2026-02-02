@@ -49,6 +49,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="FedBuyOut" />
+    <meta name="apple-mobile-web-app-title" content="FedBuyOut" />
     
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -159,5 +160,29 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script src="/register-sw.js"></script>
+    
+    <!-- PWA Install Prompt -->
+    <script>
+      // Detect iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      
+      // Detect Android
+      const isAndroid = /Android/.test(navigator.userAgent);
+      
+      // Show install instructions after 5 seconds
+      setTimeout(() => {
+        if (isIOS && !window.navigator.standalone) {
+          // iOS - show Add to Home Screen hint
+          const hint = document.createElement('div');
+          hint.innerHTML = `
+            <div style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e3a5f;color:white;padding:12px 20px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:9999;font-family:sans-serif;font-size:14px;text-align:center;">
+              📱 Tap <strong>Share</strong> then <strong>Add to Home Screen</strong> to install
+              <button onclick="this.parentElement.remove()" style="margin-left:10px;background:rgba(255,255,255,0.2);border:none;color:white;padding:4px 8px;border-radius:4px;cursor:pointer;">✕</button>
+            </div>
+          `;
+          document.body.appendChild(hint);
+        }
+      }, 5000);
+    </script>
   </body>
 </html>
