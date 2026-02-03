@@ -53,6 +53,12 @@
 - GUI installation enables browser automation capabilities
 - Moltbook limits registrations to 1/day/IP; "Thor" is taken.
 
+## GitHub Repository
+- **URL:** https://github.com/MrMafora/Buyout-Pension-Calc.git
+- **Main Branch:** master
+- **Credentials:** Stored in ~/.git-credentials
+- **Last Push:** 2026-02-03 (Full backup with all skills)
+
 ## Security Notes
 - GitHub repo can remain public (no secrets exposed)
 - Admin password uses env var with fallback (should fix)
