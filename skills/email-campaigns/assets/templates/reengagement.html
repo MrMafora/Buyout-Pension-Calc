@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{subject}}</title>
+    <style>
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            outline: none;
+            text-decoration: none;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #4a5568;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-family: Georgia, serif;
+            font-size: 24px;
+        }
+        .content {
+            padding: 40px 30px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .content p {
+            margin: 0 0 20px 0;
+        }
+        .reconnect-box {
+            background-color: #fffaf0;
+            border: 2px solid #ed8936;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .cta-primary {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #38a169;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .cta-secondary {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #e2e8f0;
+            color: #4a5568 !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            margin: 10px;
+        }
+        .footer {
+            background-color: #f7fafc;
+            padding: 30px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+        }
+        .footer a {
+            color: #4a5568;
+            text-decoration: underline;
+        }
+        @media screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .content { padding: 30px 20px !important; }
+            .cta-primary, .cta-secondary { display: block; margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div style="display: none; max-height: 0; overflow: hidden;">{{previewText}}</div>
+    
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <div class="container">
+                    <div class="header">
+                        <h1>We Miss You at FedBuyOut</h1>
+                    </div>
+                    
+                    <div class="content">
+                        <p>Hi {{firstName}},</p>
+                        
+                        <p>We noticed you haven't opened our emails in a while, and I wanted to check in.</p>
+                        
+                        <p>Life gets busy. Inboxes get full. Priorities change. I totally understand.</p>
+                        
+                        <p>But before I assume you're no longer interested, I wanted to ask:</p>
+                        
+                        <div class="reconnect-box">
+                            <h2 style="margin-top: 0; color: #c05621;">Are pension buyouts still relevant to you?</h2>
+                            
+                            <p style="font-size: 14px; color: #666;">If yes, great! Here's what you might have missed:</p>
+                            
+                            <ul style="text-align: left; display: inline-block; margin: 15px 0;">
+                                <li>Updated pension valuation calculator</li>
+                                <li>Latest market trends affecting buyout rates</li>
+                                <li>New case studies from recent clients</li>
+                                <li>Step-by-step guide to the buyout process</li>
+                            </ul>
+                            
+                            <p style="margin-top: 20px;">
+                                <a href="{{keepSubscribedUrl}}" class="cta-primary">YES, Keep Me Updated</a>
+                            </p>
+                        </div>
+                        
+                        <p>If this isn't relevant anymore, that's okay too. I just want to make sure we're not cluttering your inbox.</p>
+                        
+                        <p style="text-align: center;">
+                            <a href="{{unsubscribeUrl}}" class="cta-secondary">Unsubscribe Me</a>
+                        </p>
+                        
+                        <p>Either way, I appreciate you giving us a chance.</p>
+                        
+                        <p>Best regards,<br>
+                        <strong>The FedBuyOut Team</strong></p>
+                        
+                        <p style="font-size: 14px; color: #666; margin-top: 30px;">
+                            <em>P.S. If you're just overwhelmed by email frequency, you can <a href="{{preferencesUrl}}">update your preferences</a> to receive only monthly updates instead of our full sequence.</em>
+                        </p>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>
+                            FedBuyOut | support@fedbuyout.com | 1-800-FED-BUYOUT<br>
+                            <a href="{{unsubscribeUrl}}">Unsubscribe</a> | <a href="{{preferencesUrl}}">Update Preferences</a>
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+    <img src="https://fedbuyout.com/track?e={{emailEncoded}}&c={{campaignId}}" width="1" height="1" alt="" style="display:block;width:1px;height:1px;">
+</body>
+</html>

@@ -1,0 +1,7 @@
+/usr/lib
+├── @steipete/bird@0.8.0
+├── corepack@0.34.0
+├── npm@10.9.4
+├── openclaw@2026.2.1
+└── pm2@6.0.14
+

@@ -1,0 +1,44 @@
+We Miss You at FedBuyOut
+=========================
+
+Hi {{firstName}},
+
+We noticed you haven't opened our emails in a while, and I wanted to check in.
+
+Life gets busy. Inboxes get full. Priorities change. I totally understand.
+
+But before I assume you're no longer interested, I wanted to ask:
+
+ARE PENSION BUYOUTS STILL RELEVANT TO YOU?
+
+If yes, great! Here's what you might have missed:
+
+- Updated pension valuation calculator
+- Latest market trends affecting buyout rates
+- New case studies from recent clients
+- Step-by-step guide to the buyout process
+
+If this isn't relevant anymore, that's okay too. I just want to make sure we're not cluttering your inbox.
+
+TWO OPTIONS:
+
+1) YES, KEEP ME UPDATED
+   {{keepSubscribedUrl}}
+
+2) UNSUBSCRIBE ME
+   {{unsubscribeUrl}}
+
+Either way, I appreciate you giving us a chance.
+
+Best regards,
+The FedBuyOut Team
+
+P.S. If you're just overwhelmed by email frequency, you can update your preferences to receive only monthly updates:
+{{preferencesUrl}}
+
+---
+
+CONTACT US
+Website: https://fedbuyout.com
+Phone: 1-800-FED-BUYOUT
+Email: support@fedbuyout.com

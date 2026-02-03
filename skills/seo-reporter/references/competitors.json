@@ -1,0 +1,81 @@
+{
+  "competitors": [
+    {
+      "domain": "federalretirement.net",
+      "name": "Federal Retirement Network",
+      "type": "direct",
+      "strength": "high",
+      "focusAreas": ["retirement planning", "FERS", "CSRS"],
+      "notes": "Established authority, comprehensive guides"
+    },
+    {
+      "domain": "fedsmith.com",
+      "name": "FedSmith",
+      "type": "direct",
+      "strength": "high",
+      "focusAreas": ["federal news", "retirement", "benefits"],
+      "notes": "High domain authority, news + tools"
+    },
+    {
+      "domain": "federalnewsnetwork.com",
+      "name": "Federal News Network",
+      "type": "indirect",
+      "strength": "high",
+      "focusAreas": ["federal news", "policy", "workforce"],
+      "notes": "News focus, occasional retirement content"
+    },
+    {
+      "domain": "governmentexecutive.com",
+      "name": "Government Executive",
+      "type": "indirect",
+      "strength": "medium",
+      "focusAreas": ["federal management", "workforce"],
+      "notes": "Broader focus, less retirement-specific"
+    },
+    {
+      "domain": "opm.gov",
+      "name": "OPM Official",
+      "type": "authority",
+      "strength": "very-high",
+      "focusAreas": ["official guidance", "forms", "regulations"],
+      "notes": "Official government source, high trust"
+    },
+    {
+      "domain": "federaltimes.com",
+      "name": "Federal Times",
+      "type": "indirect",
+      "strength": "medium",
+      "focusAreas": ["federal news", "benefits"],
+      "notes": "News publication, covers buyout stories"
+    },
+    {
+      "domain": "govloop.com",
+      "name": "GovLoop",
+      "type": "community",
+      "strength": "medium",
+      "focusAreas": ["federal community", "career", "resources"],
+      "notes": "Community platform, user-generated content"
+    },
+    {
+      "domain": "federalpay.org",
+      "name": "Federal Pay",
+      "type": "tool",
+      "strength": "medium",
+      "focusAreas": ["pay calculator", "salary data"],
+      "notes": "Calculator focus, expanding to benefits"
+    }
+  ],
+  "trackingSettings": {
+    "checkFrequency": "weekly",
+    "keywordsToTrack": "all",
+    "alerts": {
+      "newCompetitorContent": true,
+      "rankingChanges": true,
+      "newBacklinks": true
+    }
+  },
+  "notes": {
+    "lastUpdated": "2026-02-03",
+    "reviewFrequency": "Quarterly competitor analysis recommended"
+  }
+}

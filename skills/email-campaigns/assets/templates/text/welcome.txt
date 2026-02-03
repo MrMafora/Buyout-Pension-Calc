@@ -1,0 +1,41 @@
+FedBuyOut - Federal Pension Buyout Specialists
+==============================================
+
+Hi {{firstName}},
+
+Welcome to FedBuyOut! We're excited to help you explore your federal pension buyout options.
+
+Over the next few days, we'll be sharing valuable information about:
+
+- The different pension options available to you
+- How buyouts work and if they might be right for your situation  
+- Real stories from federal employees we've helped
+- Tax implications and important considerations
+
+Our goal is simple: to help you make an informed decision about your financial future.
+
+WANT TO GET STARTED RIGHT AWAY?
+
+Schedule your free consultation:
+{{consultationUrl}}
+
+In the meantime, if you have any questions, simply reply to this email. We read every message and respond personally.
+
+Best regards,
+The FedBuyOut Team
+
+---
+
+CONTACT US
+Website: https://fedbuyout.com
+Phone: 1-800-FED-BUYOUT
+Email: support@fedbuyout.com
+
+You're receiving this because you signed up at FedBuyOut.com
+Unsubscribe: {{unsubscribeUrl}}
+Update Preferences: {{preferencesUrl}}
+
+---
+
+DISCLAIMER
+This email contains information about pension buyout services. This is not financial advice. Consult with qualified professionals before making decisions.

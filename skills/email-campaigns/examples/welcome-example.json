@@ -1,0 +1,49 @@
+{
+  "name": "welcome-example",
+  "type": "welcome",
+  "status": "active",
+  "createdAt": "2024-01-15T09:00:00Z",
+  "updatedAt": "2024-01-15T09:00:00Z",
+  "emails": [
+    {
+      "id": 1,
+      "subject": "Welcome to FedBuyOut - Here's What to Expect",
+      "template": "welcome",
+      "delayDays": 0,
+      "sendTime": "09:00"
+    },
+    {
+      "id": 2,
+      "subject": "How FedBuyOut Helps Federal Employees",
+      "template": "educational",
+      "delayDays": 2,
+      "sendTime": "09:00"
+    },
+    {
+      "id": 3,
+      "subject": "Success Stories from Federal Pension Buyouts",
+      "template": "welcome",
+      "delayDays": 5,
+      "sendTime": "09:00"
+    }
+  ],
+  "settings": {
+    "fromName": "FedBuyOut Team",
+    "fromEmail": "support@fedbuyout.com",
+    "replyTo": "support@fedbuyout.com",
+    "trackOpens": true,
+    "trackClicks": true,
+    "abTest": {
+      "enabled": false,
+      "variants": []
+    }
+  },
+  "stats": {
+    "leadsAdded": 0,
+    "emailsSent": 0,
+    "emailsOpened": 0,
+    "linksClicked": 0,
+    "unsubscribes": 0,
+    "bounces": 0
+  }
+}

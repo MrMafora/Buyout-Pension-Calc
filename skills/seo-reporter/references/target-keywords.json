@@ -1,0 +1,114 @@
+{
+  "keywords": [
+    {
+      "term": "federal buyout calculator",
+      "priority": "HIGH",
+      "searchVolume": 1200,
+      "difficulty": 35,
+      "category": "calculator"
+    },
+    {
+      "term": "VSIP calculator",
+      "priority": "HIGH",
+      "searchVolume": 900,
+      "difficulty": 30,
+      "category": "calculator"
+    },
+    {
+      "term": "FERS buyout",
+      "priority": "HIGH",
+      "searchVolume": 800,
+      "difficulty": 40,
+      "category": "retirement"
+    },
+    {
+      "term": "federal employee buyout",
+      "priority": "HIGH",
+      "searchVolume": 1100,
+      "difficulty": 38,
+      "category": "general"
+    },
+    {
+      "term": "early retirement calculator",
+      "priority": "HIGH",
+      "searchVolume": 1500,
+      "difficulty": 45,
+      "category": "calculator"
+    },
+    {
+      "term": "federal retirement buyout",
+      "priority": "MEDIUM",
+      "searchVolume": 600,
+      "difficulty": 32,
+      "category": "retirement"
+    },
+    {
+      "term": "government buyout calculator",
+      "priority": "MEDIUM",
+      "searchVolume": 500,
+      "difficulty": 28,
+      "category": "calculator"
+    },
+    {
+      "term": "VSIP federal",
+      "priority": "MEDIUM",
+      "searchVolume": 450,
+      "difficulty": 25,
+      "category": "vsip"
+    },
+    {
+      "term": "voluntary separation incentive",
+      "priority": "MEDIUM",
+      "searchVolume": 700,
+      "difficulty": 35,
+      "category": "vsip"
+    },
+    {
+      "term": "federal early out calculator",
+      "priority": "MEDIUM",
+      "searchVolume": 400,
+      "difficulty": 30,
+      "category": "calculator"
+    },
+    {
+      "term": "federal buyout 2025",
+      "priority": "LOW",
+      "searchVolume": 300,
+      "difficulty": 25,
+      "category": "trending"
+    },
+    {
+      "term": "federal buyout vs early retirement",
+      "priority": "LOW",
+      "searchVolume": 250,
+      "difficulty": 28,
+      "category": "comparison"
+    },
+    {
+      "term": "VSIP taxable",
+      "priority": "LOW",
+      "searchVolume": 350,
+      "difficulty": 30,
+      "category": "tax"
+    },
+    {
+      "term": "federal employee voluntary separation",
+      "priority": "LOW",
+      "searchVolume": 200,
+      "difficulty": 32,
+      "category": "vsip"
+    },
+    {
+      "term": "OPM buyout calculator",
+      "priority": "LOW",
+      "searchVolume": 180,
+      "difficulty": 35,
+      "category": "calculator"
+    }
+  ],
+  "notes": {
+    "lastUpdated": "2026-02-03",
+    "source": "Ahrefs/SEMrush estimates",
+    "updateFrequency": "Monthly review recommended"
+  }
+}

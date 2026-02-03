@@ -1,0 +1,33 @@
+**Title:** I built a free federal buyout calculator - would love your feedback
+
+**Subreddit:** r/fednews
+
+**Content:**
+
+Hi everyone! I'm a federal employee (15 years FERS) and I noticed there's a lot of confusion when buyout offers come around about whether to take them or stay for the pension.
+
+I built a free calculator that compares your options side-by-side:
+
+✅ FERS/CSRS pension calculations with High-3
+✅ Buyout tax implications (federal + state)
+✅ Break-even analysis (how long until pension catches up)
+✅ Early retirement penalties if under MRA
+✅ Survivor benefit costs
+✅ Military buyback impact
+
+**Check it out:** https://fedbuyout.com
+
+It's completely free, no email required to use (though there's a newsletter if you want updates).
+
+I've tested it against OPM calculations and it's accurate, but I'd love feedback from this community on:
+- What features would you find helpful?
+- Any edge cases I might have missed?
+- Would this be useful for your colleagues?
+
+Also happy to answer any buyout/pension questions - I've researched this stuff way too much 😅
+
+Thanks!
+
+**Flair:** Resource/Education
+
+**Note:** This is my project, I hope that's okay to share here. Happy to answer questions about it.

@@ -1,0 +1,23 @@
+Backup created: Tue Feb  3 22:25:21 UTC 2026
+System: Linux ubuntu-appworld 6.8.0-90-generic #91-Ubuntu SMP PREEMPT_DYNAMIC Tue Nov 18 14:14:30 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+Hostname: ubuntu-appworld
+Workspace: /root/.openclaw/workspace
+
+Contents:
+- workspace.tar.gz: Full workspace code
+- skills.tar.gz: All custom skills
+- memory.tar.gz: Memory files
+- *.md: Identity and configuration files
+- env.backup: Environment variables
+- installed_packages.txt: System packages
+- python_packages.txt: Python packages
+- npm_packages.txt: NPM packages
+- pm2_ecosystem.json: Process manager config
+
+To restore:
+1. Extract workspace.tar.gz to /root/.openclaw/workspace
+2. Extract skills.tar.gz to workspace/skills/
+3. Restore .env from env.backup
+4. Run: dpkg --set-selections < installed_packages.txt && apt-get dselect-upgrade
+5. Run: pip install -r python_packages.txt (after converting format)
+6. Run: pm2 ecosystem import pm2_ecosystem.json

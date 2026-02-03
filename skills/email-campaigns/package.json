@@ -1,0 +1,18 @@
+{
+  "name": "email-campaigns",
+  "version": "1.0.0",
+  "description": "Email campaign automation for FedBuyOut",
+  "scripts": {
+    "create-campaign": "node scripts/create-campaign.js",
+    "add-to-sequence": "node scripts/add-to-sequence.js",
+    "send-emails": "node scripts/send-emails.js",
+    "ab-test": "node scripts/ab-test.js",
+    "track-opens": "node scripts/track-opens.js"
+  },
+  "dependencies": {
+    "csv-parse": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

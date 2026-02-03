@@ -1,0 +1,27 @@
+FedBuyOut - Federal Pension Buyout Specialists
+==============================================
+
+Hi {{firstName}},
+
+{{emailBody}}
+
+{{ctaText}}:
+{{ctaUrl}}
+
+Best regards,
+The FedBuyOut Team
+
+---
+
+CONTACT US
+Website: https://fedbuyout.com
+Phone: 1-800-FED-BUYOUT
+Email: support@fedbuyout.com
+
+Unsubscribe: {{unsubscribeUrl}}
+Update Preferences: {{preferencesUrl}}
+
+---
+
+This email contains information about pension buyout services.
+This is not financial advice. Consult qualified professionals before making decisions.

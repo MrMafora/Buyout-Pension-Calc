@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{subject}}</title>
+    <style>
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            outline: none;
+            text-decoration: none;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #1a365d;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-family: Georgia, serif;
+            font-size: 24px;
+        }
+        .content {
+            padding: 40px 30px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .content p {
+            margin: 0 0 20px 0;
+        }
+        .content h2 {
+            color: #1a365d;
+            font-size: 20px;
+            margin: 30px 0 15px 0;
+        }
+        .cta-container {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #c53030;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .newsletter-section {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 20px 0;
+        }
+        .newsletter-section:last-child {
+            border-bottom: none;
+        }
+        .footer {
+            background-color: #f7fafc;
+            padding: 30px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+        }
+        .footer a {
+            color: #4a5568;
+            text-decoration: underline;
+        }
+        @media screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .content { padding: 30px 20px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div style="display: none; max-height: 0; overflow: hidden;">{{previewText}}</div>
+    
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <div class="container">
+                    <div class="header">
+                        <h1>FedBuyOut Newsletter</h1>
+                        <p style="color: #cbd5e0; margin: 10px 0 0 0; font-size: 14px;">Federal Pension Insights & Updates</p>
+                    </div>
+                    
+                    <div class="content">
+                        <p>Hi {{firstName}},</p>
+                        
+                        <p>Welcome to this month's FedBuyOut newsletter. Here's what's happening in the world of federal pensions and buyouts:</p>
+                        
+                        <div class="newsletter-section">
+                            <h2>Market Update: Interest Rates and Your Pension</h2>
+                            <p>This month, we've seen significant movement in interest rates that could affect pension buyout valuations. If you've been considering exploring your options, now might be an important time to understand your numbers.</p>
+                            <p><a href="{{articleUrl1}}" style="color: #c53030;">Read the full analysis →</a></p>
+                        </div>
+                        
+                        <div class="newsletter-section">
+                            <h2>Client Success Story</h2>
+                            <p>"I was skeptical at first, but FedBuyOut helped me understand that a buyout was the right choice for my family's situation. The process was transparent and professional."</p>
+                            <p><em>— Sarah M., 22-year USPS veteran</em></p>
+                        </div>
+                        
+                        <div class="newsletter-section">
+                            <h2>This Month's Tip</h2>
+                            <p><strong>Document Your Decision Process:</strong> Whether you choose monthly payments or a buyout, document your reasoning. Include your age, health status, financial goals, and why you made your choice. This helps if you ever need to revisit the decision or explain it to family members.</p>
+                        </div>
+                        
+                        <div class="newsletter-section">
+                            <h2>Upcoming Webinar</h2>
+                            <p>Join us for a free webinar: "Understanding Pension Buyouts: A Complete Guide for Federal Employees"</p>
+                            <p><strong>Date:</strong> {{webinarDate}}<br>
+                            <strong>Time:</strong> 2:00 PM EST<br>
+                            <strong>Duration:</strong> 45 minutes + Q&A</p>
+                            
+                            <div class="cta-container">
+                                <a href="{{webinarUrl}}" class="cta-button">Reserve Your Spot</a>
+                            </div>
+                        </div>
+                        
+                        <p>As always, if you have questions about your specific situation, just reply to this email.</p>
+                        
+                        <p>Best regards,<br>
+                        <strong>The FedBuyOut Team</strong></p>
+                    </div>
+                    
+                    <div class="footer">
+                        <p>
+                            FedBuyOut | support@fedbuyout.com | 1-800-FED-BUYOUT<br>
+                            <a href="{{unsubscribeUrl}}">Unsubscribe</a> | <a href="{{preferencesUrl}}">Update Preferences</a>
+                        </p>
+                        <p style="font-size: 11px; margin-top: 20px;">
+                            You received this because you subscribed to FedBuyOut updates.<br>
+                            This is not financial advice. Consult qualified professionals before making decisions.
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+    <img src="https://fedbuyout.com/track?e={{emailEncoded}}&c={{campaignId}}" width="1" height="1" alt="" style="display:block;width:1px;height:1px;">
+</body>
+</html>

@@ -1,0 +1,65 @@
+FedBuyOut Newsletter - Federal Pension Insights & Updates
+==========================================================
+
+Hi {{firstName}},
+
+Welcome to this month's FedBuyOut newsletter. Here's what's happening in the world of federal pensions and buyouts:
+
+---
+
+MARKET UPDATE: INTEREST RATES AND YOUR PENSION
+
+This month, we've seen significant movement in interest rates that could affect pension buyout valuations. If you've been considering exploring your options, now might be an important time to understand your numbers.
+
+Read the full analysis:
+{{articleUrl1}}
+
+---
+
+CLIENT SUCCESS STORY
+
+"I was skeptical at first, but FedBuyOut helped me understand that a buyout was the right choice for my family's situation. The process was transparent and professional."
+
+— Sarah M., 22-year USPS veteran
+
+---
+
+THIS MONTH'S TIP
+
+Document Your Decision Process:
+Whether you choose monthly payments or a buyout, document your reasoning. Include your age, health status, financial goals, and why you made your choice. This helps if you ever need to revisit the decision or explain it to family members.
+
+---
+
+UPCOMING WEBINAR
+
+Join us for a free webinar: "Understanding Pension Buyouts: A Complete Guide for Federal Employees"
+
+Date: {{webinarDate}}
+Time: 2:00 PM EST
+Duration: 45 minutes + Q&A
+
+Reserve your spot:
+{{webinarUrl}}
+
+---
+
+As always, if you have questions about your specific situation, just reply to this email.
+
+Best regards,
+The FedBuyOut Team
+
+---
+
+CONTACT US
+Website: https://fedbuyout.com
+Phone: 1-800-FED-BUYOUT
+Email: support@fedbuyout.com
+
+Unsubscribe: {{unsubscribeUrl}}
+Update Preferences: {{preferencesUrl}}
+
+---
+
+You received this because you subscribed to FedBuyOut updates.
+This is not financial advice. Consult qualified professionals before making decisions.

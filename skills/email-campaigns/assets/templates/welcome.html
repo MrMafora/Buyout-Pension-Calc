@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{subject}}</title>
+    <style>
+        /* Client-specific resets */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            outline: none;
+            text-decoration: none;
+        }
+        /* Reset styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f4f4f4;
+        }
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        /* Header */
+        .header {
+            background-color: #1a365d;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-family: Georgia, serif;
+            font-size: 24px;
+            font-weight: normal;
+        }
+        .header img {
+            max-width: 200px;
+            height: auto;
+        }
+        /* Content */
+        .content {
+            padding: 40px 30px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .content p {
+            margin: 0 0 20px 0;
+        }
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: #c53030;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .cta-button:hover {
+            background-color: #9b2c2c;
+        }
+        /* Footer */
+        .footer {
+            background-color: #f7fafc;
+            padding: 30px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #718096;
+            border-top: 1px solid #e2e8f0;
+        }
+        .footer a {
+            color: #4a5568;
+            text-decoration: underline;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        /* Mobile responsive */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+            }
+            .content {
+                padding: 30px 20px !important;
+            }
+            .header {
+                padding: 20px !important;
+            }
+            .header h1 {
+                font-size: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preview text -->
+    <div style="display: none; max-height: 0; overflow: hidden;">
+        {{previewText}}
+    </div>
+    
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <div class="container">
+                    <!-- Header -->
+                    <div class="header">
+                        <h1>FedBuyOut</h1>
+                        <p style="color: #cbd5e0; margin: 10px 0 0 0; font-size: 14px;">Federal Pension Buyout Specialists</p>
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="content">
+                        <p>Hi {{firstName}},</p>
+                        
+                        <p>Welcome to FedBuyOut! We're excited to help you explore your federal pension buyout options.</p>
+                        
+                        <p>Over the next few days, we'll be sharing valuable information about:</p>
+                        
+                        <ul style="padding-left: 20px; margin-bottom: 20px;">
+                            <li>The different pension options available to you</li>
+                            <li>How buyouts work and if they might be right for your situation</li>
+                            <li>Real stories from federal employees we've helped</li>
+                            <li>Tax implications and important considerations</li>
+                        </ul>
+                        
+                        <p>Our goal is simple: to help you make an informed decision about your financial future.</p>
+                        
+                        <p><strong>Want to get started right away?</strong></p>
+                        
+                        <div class="cta-container">
+                            <a href="{{consultationUrl}}" class="cta-button">Schedule Your Free Consultation</a>
+                        </div>
+                        
+                        <p>In the meantime, if you have any questions, simply reply to this email. We read every message and respond personally.</p>
+                        
+                        <p>Best regards,<br>
+                        <strong>The FedBuyOut Team</strong></p>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        <div class="social-links">
+                            <a href="https://fedbuyout.com">Website</a> |
+                            <a href="tel:1-800-FED-BUYOUT">1-800-FED-BUYOUT</a>
+                        </div>
+                        
+                        <p>
+                            FedBuyOut<br>
+                            support@fedbuyout.com<br><br>
+                            
+                            You're receiving this because you signed up at FedBuyOut.com<br>
+                            <a href="{{unsubscribeUrl}}">Unsubscribe</a> | 
+                            <a href="{{preferencesUrl}}">Update Preferences</a>
+                        </p>
+                        
+                        <p style="font-size: 11px; margin-top: 20px;">
+                            This email contains information about pension buyout services. 
+                            This is not financial advice. Consult with qualified professionals before making decisions.
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+    <!-- Tracking pixel -->
+    <img src="https://fedbuyout.com/track?e={{emailEncoded}}&c={{campaignId}}" width="1" height="1" alt="" style="display:block;width:1px;height:1px;">
+</body>
+</html>

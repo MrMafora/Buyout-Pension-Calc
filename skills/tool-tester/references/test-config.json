@@ -1,0 +1,69 @@
+{
+  "tools": {
+    "timeout": 30,
+    "retry": 2,
+    "exclude": []
+  },
+  "apis": {
+    "timeout": 10,
+    "retry": 3,
+    "endpoints": {
+      "brave": {
+        "url": "https://api.search.brave.com",
+        "description": "Brave Search API",
+        "auth_type": "api_key",
+        "env_var": "BRAVE_API_KEY"
+      },
+      "resend": {
+        "url": "https://api.resend.com",
+        "description": "Resend Email API",
+        "auth_type": "api_key",
+        "env_var": "RESEND_API_KEY"
+      },
+      "gateway": {
+        "url": "http://localhost:3000",
+        "description": "OpenClaw Gateway",
+        "auth_type": "none"
+      },
+      "browser": {
+        "url": "http://localhost:9222",
+        "description": "Browser Control Server",
+        "auth_type": "none"
+      }
+    }
+  },
+  "browser": {
+    "profiles": ["chrome", "openclaw"],
+    "test_url": "https://example.com",
+    "headless": true,
+    "screenshot_format": "png"
+  },
+  "messaging": {
+    "channels": ["whatsapp", "discord", "telegram", "email"],
+    "test_recipient": "test@example.com",
+    "dry_run": true
+  },
+  "scripts": {
+    "directories": [
+      "./scripts",
+      "./skills/*/scripts"
+    ],
+    "extensions": [".sh", ".py", ".js"],
+    "timeout": 30
+  },
+  "integration": {
+    "suites": [
+      "file-operations",
+      "web-workflow",
+      "multi-tool",
+      "shell-execution",
+      "browser-automation",
+      "messaging"
+    ]
+  },
+  "reporting": {
+    "formats": ["markdown", "html", "json"],
+    "history_days": 30,
+    "auto_archive": true
+  }
+}

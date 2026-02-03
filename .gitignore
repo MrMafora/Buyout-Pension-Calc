@@ -1,0 +1,6 @@
+.env
+.birdrc.json5
+*.pem
+*.key
+secrets/
+config/local*

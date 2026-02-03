@@ -1,0 +1,10 @@
+{
+  "name": "test-skill",
+  "version": "1.0.0",
+  "description": "A test skill",
+  "author": "Your Name",
+  "license": "MIT",
+  "entryPoint": "scripts/main.py",
+  "dependencies": [],
+  "tags": []
+}

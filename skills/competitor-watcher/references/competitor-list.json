@@ -1,0 +1,141 @@
+{
+  "metadata": {
+    "last_updated": "2026-02-03",
+    "version": "1.0",
+    "description": "Master list of competitors tracked for FedBuyOut"
+  },
+  "competitors": [
+    {
+      "id": "fedcalc-pro",
+      "name": "FedCalc Pro",
+      "url": "https://fedcalcpro.com",
+      "priority": "high",
+      "category": "calculator",
+      "track_pricing": true,
+      "pricing_url": "https://fedcalcpro.com/pricing",
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Direct competitor with similar FERS/CSRS calculators"
+    },
+    {
+      "id": "federal-retirement-calculator",
+      "name": "Federal Retirement Calculator",
+      "url": "https://federalretirementcalculator.com",
+      "priority": "high",
+      "category": "calculator",
+      "track_pricing": true,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Popular federal retirement tool"
+    },
+    {
+      "id": "gov-retirement-planner",
+      "name": "Gov Retirement Planner",
+      "url": "https://govretirementplanner.com",
+      "priority": "medium",
+      "category": "tool",
+      "track_pricing": true,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Retirement planning suite for federal employees"
+    },
+    {
+      "id": "fed-benefits-advisor",
+      "name": "Federal Benefits Advisor",
+      "url": "https://fedbenefitsadvisor.com",
+      "priority": "high",
+      "category": "advisor",
+      "track_pricing": true,
+      "pricing_url": "https://fedbenefitsadvisor.com/services",
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Financial advisory firm targeting federal employees"
+    },
+    {
+      "id": "opm-retirement",
+      "name": "OPM Federal Retirement",
+      "url": "https://www.opm.gov/retirement-services",
+      "priority": "high",
+      "category": "resource",
+      "track_pricing": false,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Official OPM resources - baseline for accuracy"
+    },
+    {
+      "id": "fegli-calculator",
+      "name": "FEGLI Calculator",
+      "url": "https://feglicalculator.com",
+      "priority": "medium",
+      "category": "calculator",
+      "track_pricing": true,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Federal life insurance calculator"
+    },
+    {
+      "id": "tsp-calc",
+      "name": "TSP Calculator Plus",
+      "url": "https://tspcalculatorplus.com",
+      "priority": "medium",
+      "category": "calculator",
+      "track_pricing": true,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "TSP projection and analysis tool"
+    },
+    {
+      "id": "my-federal-retirement",
+      "name": "My Federal Retirement",
+      "url": "https://myfederalretirement.com",
+      "priority": "high",
+      "category": "advisor",
+      "track_pricing": true,
+      "pricing_url": "https://myfederalretirement.com/consulting",
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Comprehensive federal retirement planning service"
+    },
+    {
+      "id": "fed-smart-calc",
+      "name": "FedSmart Calculator",
+      "url": "https://fedsmartcalc.com",
+      "priority": "medium",
+      "category": "calculator",
+      "track_pricing": true,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Smart calculator with AI features"
+    },
+    {
+      "id": "federal-money-guide",
+      "name": "Federal Money Guide",
+      "url": "https://federalmoneyguide.com",
+      "priority": "low",
+      "category": "resource",
+      "track_pricing": false,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Educational resource site"
+    },
+    {
+      "id": "retire-fed",
+      "name": "RetireFed",
+      "url": "https://retirefed.com",
+      "priority": "medium",
+      "category": "tool",
+      "track_pricing": true,
+      "pricing_url": "https://retirefed.com/plans",
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Retirement planning platform for federal workers"
+    },
+    {
+      "id": "fed-planning-pro",
+      "name": "Federal Planning Pro",
+      "url": "https://fedplanningpro.com",
+      "priority": "medium",
+      "category": "advisor",
+      "track_pricing": true,
+      "pricing_url": null,
+      "date_added": "2026-02-03T00:00:00Z",
+      "notes": "Professional financial planning for feds"
+    }
+  ]
+}

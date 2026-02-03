@@ -1,0 +1,65 @@
+FedBuyOut - Federal Pension Buyout Specialists
+==============================================
+
+Hi {{firstName}},
+
+Today I want to walk you through something most federal employees don't fully understand: YOUR PENSION OPTIONS.
+
+If you're like most federal employees, you've been contributing to your pension for years. But you might not realize you have more options than just the traditional monthly payments.
+
+THREE PATHS AVAILABLE TO YOU
+
+Option 1: Traditional Monthly Payments
+The standard choice. You receive a fixed monthly amount for life.
+
+✓ Guaranteed income for life
+✓ No investment decisions required
+✗ Fixed amount doesn't adjust for inflation
+✗ No access to lump sum for emergencies
+
+Option 2: Lump Sum Withdrawal
+Some pension plans allow you to take a one-time lump sum.
+
+✓ Full control of your money
+✓ Can invest as you choose
+✗ Immediate tax burden (potentially 37%+)
+✗ Risk of outliving your funds
+
+Option 3: Pension Buyout
+A specialized financial transaction where a third party purchases your pension rights.
+
+✓ Lump sum without full tax penalty
+✓ Flexibility to use funds as needed
+✓ Can pay off debt, invest, or start a business
+✗ Requires careful evaluation
+
+WHICH OPTION IS RIGHT FOR YOU?
+
+The truth is, there's no one-size-fits-all answer. The right choice depends on your age, health, financial goals, risk tolerance, other retirement savings, and immediate financial needs.
+
+Over the next few days, I'll dive deeper into each option and share what we've learned from helping hundreds of federal employees make this decision.
+
+In the meantime, if you have questions about your specific situation, just reply to this email. I read every response personally.
+
+P.S. Want to know what your pension might be worth in a buyout? Our free consultation includes a personalized valuation with no obligation.
+
+Schedule your free consultation:
+{{consultationUrl}}
+
+Best regards,
+The FedBuyOut Team
+
+---
+
+CONTACT US
+Website: https://fedbuyout.com
+Phone: 1-800-FED-BUYOUT
+Email: support@fedbuyout.com
+
+Unsubscribe: {{unsubscribeUrl}}
+Update Preferences: {{preferencesUrl}}
+
+---
+
+DISCLAIMER
+This email contains information about pension buyout services. This is not financial advice.

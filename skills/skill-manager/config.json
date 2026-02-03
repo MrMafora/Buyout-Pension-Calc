@@ -1,0 +1,8 @@
+{
+  "skillsDir": "/root/.openclaw/workspace/skills",
+  "registryPath": "/root/.openclaw/workspace/skills/skill-manager/registry.json",
+  "defaultTemplate": "basic",
+  "autoInstallDeps": false,
+  "strictValidation": false,
+  "backupOnUpdate": true
+}

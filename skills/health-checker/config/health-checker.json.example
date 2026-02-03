@@ -1,0 +1,41 @@
+{
+  "_comment": "Health Checker Configuration",
+  "_warning": "Copy this file to ~/.openclaw/config/health-checker.json to use custom settings",
+  
+  "disk": {
+    "warning_percent": 80,
+    "critical_percent": 90
+  },
+  
+  "memory": {
+    "warning_percent": 85,
+    "critical_percent": 95
+  },
+  
+  "logs": {
+    "max_size_mb": 100,
+    "max_age_days": 7
+  },
+  
+  "temp": {
+    "max_age_hours": 24,
+    "cleanup_enabled": true
+  },
+  
+  "services": [
+    "openclaw-gateway"
+  ],
+  
+  "network": {
+    "ping_targets": [
+      "8.8.8.8",
+      "1.1.1.1"
+    ],
+    "timeout_seconds": 5
+  },
+  
+  "watch": {
+    "interval_minutes": 5,
+    "alert_cooldown_seconds": 3600
+  }
+}
